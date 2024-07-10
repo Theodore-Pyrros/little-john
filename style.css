@@ -26,6 +26,21 @@ p, span, div {
     font-family: serif !important;  /* Serif Font with !important */
 }
 
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #0E1117; /* Adjust background color to match your theme */
+    color: #FFFFFF; /* Adjust text color to match your theme */
+    text-align: center;
+    padding: 10px 0;
+    font-size: small;
+}
+
+
+
+
 
 
 
