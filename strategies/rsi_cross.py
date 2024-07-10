@@ -7,6 +7,7 @@ from backtesting.lib import crossover
 from backtesting.test import SMA
 from data_handler import fetch_data
 from utils import run_backtest, plot_strat_perf, display_metrics
+import mplcursors
 
 class RsiCross(Strategy):
     rsi_sma_short = 10
