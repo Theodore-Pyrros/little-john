@@ -150,9 +150,9 @@ def run_sma_cross(ticker, start_date, end_date, cash, commission, n1, n2, stop_l
         # Visualize the strategy with trades
         st.subheader('SMA Cross Visualization with Trades')
         with st.expander("Expand to see the SMA Cross Visualization"):
-        if '_trades' in output and not output['_trades'].empty:
+         if '_trades' in output and not output['_trades'].empty:
             sma_cross_viz(data, n1, n2, trades=output['_trades'])
-        else:
+         else:
             st.warning("No trades were executed in this backtest.")
             sma_cross_viz(data, n1, n2)  # Still show the visualization even if no trades
         
