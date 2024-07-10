@@ -2,7 +2,7 @@ import yfinance as yf
 import pandas as pd
 
 def fetch_data(ticker, start_date, end_date):
-    data = yf.download(ticker, start=start_date, end=end_date, interval='5m')
+    data = yf.download(ticker, start=start_date, end=end_date, interval='5m', progress=False)
     
     if 'Adj Close' in data.columns:
         data = data.drop(columns=['Adj Close'])
@@ -19,7 +19,7 @@ def fetch_data(ticker, start_date, end_date):
     return data
 
 def fetch_data_pv(ticker, start_date, end_date):
-    data = yf.download(ticker, start=start_date, end=end_date, interval='5m')
+    data = yf.download(ticker, start=start_date, end=end_date, interval='5m', progress=False)
     
     if 'Adj Close' in data.columns:
         data = data.drop(columns=['Adj Close'])
