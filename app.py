@@ -277,6 +277,18 @@ def apply_common_style(fig):
     )
     return fig
 
+def sma_cross_viz(data, sma_short, sma_long):
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=data.index, y=data['Close'], mode='lines', name='Price'))
+    fig.add_trace(go.Scatter(x=data.index, y=data[f'SMA({sma_short})'], mode='lines', name=f'SMA({sma_short})'))
+    fig.add_trace(go.Scatter(x=data.index, y=data[f'SMA({sma_long})'], mode='lines', name=f'SMA({sma_long})'))
+
+    # Apply common style
+    fig = apply_common_style(fig)
+
+    st.plotly_chart(fig)
+
+
 
 st.markdown("<div class='footer'>© Little John - Your Companion in Mastering the Markets</div>", unsafe_allow_html=True)
 
