@@ -22,42 +22,92 @@ def display_metrics(output):
     return result
 
 
-def plot_strat_perf(output, title):
-    if '_equity_curve' not in output:
-        st.error("Equity curve data not available. The backtest may not have completed successfully.")
-        return
+def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
+    # Path to the Times New Roman font file (adjust this path as needed)
+    font_path = "/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman.ttf"  # Example path for Linux
 
-    equity_curve = output['_equity_curve']
-    
-    if equity_curve.empty:
-        st.warning("Equity curve is empty. No trades may have been executed.")
-        return
+    # Explicitly set font properties
+    font_properties = fm.FontProperties(fname=font_path)
+    fontdict = {'fontproperties': font_properties, 'color': 'white'}
 
-    # Filter for trading days at market close (4:00 PM)
-    trading_day_equity = equity_curve[
-        (equity_curve.index.dayofweek < 5) &  # Monday = 0, Friday = 4
-        (equity_curve.index.hour == 15) &     # 3:00 PM (15:00)
-        (equity_curve.index.minute == 55)     # Last data point before 4:00 PM
-    ]
-    
-    if trading_day_equity.empty:
-        st.warning("No data points match the filtering criteria. Displaying full equity curve.")
-        trading_day_equity = equity_curve
+    data = data[data['Volume'] > 0]
+    data.reset_index(inplace=True)
 
-    fig, ax = plt.subplots(figsize=(14, 5))
-    ax.plot(trading_day_equity.index, trading_day_equity['Equity'], label='Equity')
-    ax.set_title(title, fontsize=14, fontweight='bold')
-    ax.set_xlabel('Date', fontsize=12, fontweight='bold')
-    ax.set_ylabel('Equity', fontsize=12, fontweight='bold')
-    ax.legend()
-    ax.grid(True)
-    
-    fig.autofmt_xdate()
-    
-    # Format the x-axis to display dates in YYYY-MM-DD format
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-    
+    if 'Datetime' not in data.columns:
+        data['Datetime'] = data.index
+
+    # Calculate RSI
+    close = data['Close']
+    delta = close.diff()
+    gain = delta.where(delta > 0, 0)
+    loss = -delta.where(delta < 0, 0)
+
+    avg_gain = gain.rolling(window=rsi_period, min_periods=1).mean()
+    avg_loss = loss.rolling(window=rsi_period, min_periods=1).mean()
+
+    rs = avg_gain / avg_loss
+    rsi = 100 - (100 / (1 + rs))
+    rsi = rsi.fillna(50)  # Fill NaN values with 50 (neutral)
+    short_rsi = rsi.rolling(window=rsi_sma_short, min_periods=1).mean()
+    long_rsi = rsi.rolling(window=rsi_sma_long, min_periods=1).mean()
+
+    data['Date'] = data['Datetime'].dt.date
+    daily_indices = data.groupby('Date').first().index
+
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 6), sharex=True)
+
+    # Set transparent background
+    fig.patch.set_alpha(0)
+    ax1.set_facecolor('none')
+    ax2.set_facecolor('none')
+
+    # Remove the outline of the axes
+    for spine in ax1.spines.values():
+        spine.set_visible(False)
+    for spine in ax2.spines.values():
+        spine.set_visible(False)
+
+    line1, = ax1.plot(data.index, data['Close'], label='Price', color='blue')
+    ax1.set_ylabel('Price', **fontdict)
+    ax1.legend(facecolor='white', framealpha=0.5)
+    ax1.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
+    ax1.grid(False, axis='x')
+
+    line2, = ax2.plot(data.index, rsi, label='RSI', color='purple')
+    line3, = ax2.plot(data.index, short_rsi, label=f'RSI SMA({rsi_sma_short})', color='orange')
+    line4, = ax2.plot(data.index, long_rsi, label=f'RSI SMA({rsi_sma_long})', color='green')
+    ax2.set_ylabel('RSI', **fontdict)
+    ax2.set_ylim(-5, 105)
+    ax2.legend(facecolor='white', framealpha=0.5)
+    ax2.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
+    ax2.grid(False, axis='x')
+
+    plt.title('RSI Cross Visualization', **fontdict)
+    plt.xlabel('Time', **fontdict)
+
+    ax1.set_xticks([data[data['Date'] == date].index[0] for date in daily_indices])
+    ax1.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30, **fontdict)
+
+    # Change tick colors to white
+    ax1.tick_params(axis='x', colors='white')
+    ax1.tick_params(axis='y', colors='white')
+    ax2.tick_params(axis='x', colors='white')
+    ax2.tick_params(axis='y', colors='white')
+
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.15)
     plt.tight_layout()
+
+    # Add hover functionality with mplcursors
+    cursor1 = mplcursors.cursor(line1, hover=True)
+    cursor1.connect("add", lambda sel: sel.annotation.set_text(
+        f"Date: {data['Datetime'].iloc[sel.target.index].strftime('%Y-%m-%d %H:%M')}\nPrice: {data['Close'].iloc[sel.target.index]:.2f}"
+    ))
+
+    cursor2 = mplcursors.cursor([line2, line3, line4], hover=True)
+    cursor2.connect("add", lambda sel: sel.annotation.set_text(
+        f"Date: {data['Datetime'].iloc[sel.target.index].strftime('%Y-%m-%d %H:%M')}\nValue: {sel.target[1]:.2f}"
+    ))
+
     st.pyplot(fig)
 
 
