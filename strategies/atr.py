@@ -88,7 +88,7 @@ def atr_viz(data, atr_period=14, atr_multiplier=2):
     data['Date'] = data['Datetime'].dt.date
     daily_indices = data.groupby('Date').first().index
     
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 10), sharex=True, facecolor='none')
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 6), sharex=True, facecolor='none')
 
     # Set transparent background
     fig.patch.set_alpha(0)
