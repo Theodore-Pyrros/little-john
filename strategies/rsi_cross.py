@@ -70,13 +70,7 @@ class RsiCross(Strategy):
 # Set global font properties
 plt.rcParams['font.family'] = 'serif'
 plt.rcParams['font.serif'] = ['Times New Roman']
-plt.rcParams['text.color'] = 'white'
-plt.rcParams['axes.labelcolor'] = 'white'
-plt.rcParams['xtick.color'] = 'white'
-plt.rcParams['ytick.color'] = 'white'
-plt.rcParams['axes.edgecolor'] = 'white'
-# plt.rcParams['figure.facecolor'] = 'none'
-# plt.rcParams['axes.facecolor'] = 'none'
+
 
 def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     data = data[data['Volume'] > 0]
