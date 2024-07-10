@@ -6,6 +6,8 @@ from backtesting import Strategy
 from data_handler import fetch_data
 from utils import run_backtest, plot_strat_perf, display_metrics
 
+import matplotlib.font_manager as fm
+
 class MomentumStrategy(Strategy):
     mom_period = 14
     mom_threshold = 2.0
@@ -52,6 +54,12 @@ class MomentumStrategy(Strategy):
                 self.entry_price = self.data.Close[-1]
                 self.position_type = 'short'
 
+
+# Define font properties
+font_path = "Times New Roman.ttf"
+font_properties = fm.FontProperties(fname=font_path, size=14)
+title_font_properties = fm.FontProperties(fname=font_path, size=16, weight='bold')
+
 def momentum_viz(data, mom_period=14, mom_threshold=0):
     data = data[data['Volume'] > 0].copy()
     data.reset_index(inplace=True)
@@ -63,34 +71,56 @@ def momentum_viz(data, mom_period=14, mom_threshold=0):
     data['Date'] = data['Datetime'].dt.date
     daily_indices = data.groupby('Date').first().index
     
-    fig, ax1 = plt.subplots(figsize=(14, 8))
+    fig, ax1 = plt.subplots(figsize=(14, 6), facecolor='none')
+
+    # Set transparent background
+    fig.patch.set_alpha(0)
+    ax1.set_facecolor('none')
+
+    # Remove the outline of the axes
+    for spine in ax1.spines.values():
+        spine.set_visible(False)
     
-    ax1.plot(data.index, data['Close'], label='Price', color='blue')
-    ax1.set_title('Momentum Strategy Visualization')
-    ax1.set_xlabel('Time')
-    ax1.set_ylabel('Price', color='blue')
-    ax1.tick_params(axis='y', labelcolor='blue')
-    ax1.grid(True)
-    
+    ax1.plot(data.index, data['Close'], label='Price', color='#00A86B')  # Flashier pine green
+    ax1.set_ylabel('Price', fontproperties=font_properties, color='white')
+    ax1.legend(prop=font_properties, facecolor='white', framealpha=0.5)
+    ax1.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
+    ax1.grid(False, axis='x')
+
     ax2 = ax1.twinx()
     ax2.plot(data.index[mom_period:], roc[mom_period:], label=f'ROC({mom_period})', color='orange')
     ax2.axhline(y=mom_threshold, color='r', linestyle='--', label='mom_threshold')
     ax2.axhline(y=-mom_threshold, color='r', linestyle='--')
-    ax2.set_ylabel('Rate of Change (%)', color='orange')
-    ax2.tick_params(axis='y', labelcolor='orange')
+    ax2.set_ylabel('Rate of Change (%)', fontproperties=font_properties, color='orange')
+    ax2.legend(prop=font_properties, facecolor='white', framealpha=0.5)
     
     lines1, labels1 = ax1.get_legend_handles_labels()
     lines2, labels2 = ax2.get_legend_handles_labels()
-    ax1.legend(lines1 + lines2, labels1 + labels2, loc='upper left')
+    ax1.legend(lines1 + lines2, labels1 + labels2, loc='upper left', prop=font_properties)
+
+    ax1.set_xticks([data[data['Date'] == date].index[0] for date in daily_indices])
+    ax1.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30, fontproperties=font_properties, color='white')
     
-    plt.xticks(
-        ticks=[data[data['Date'] == date].index[0] for date in daily_indices],
-        labels=[date.strftime('%Y-%m-%d') for date in daily_indices],
-        rotation=30
-    )
+    ax1.tick_params(axis='x', colors='white', labelsize=12)
+    ax1.tick_params(axis='y', colors='white', labelsize=12)
+    ax2.tick_params(axis='x', colors='white', labelsize=12)
+    ax2.tick_params(axis='y', colors='orange', labelsize=12)
     
+    for label in ax1.get_xticklabels() + ax1.get_yticklabels():
+        label.set_fontproperties(font_properties)
+    for label in ax2.get_xticklabels() + ax2.get_yticklabels():
+        label.set_fontproperties(font_properties)
+
+    fig.suptitle('Momentum Strategy Visualization', fontproperties=title_font_properties, color='white')
+    ax1.set_xlabel('Time', fontproperties=font_properties, color='white')
+    
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.9, bottom=0.15)
     plt.tight_layout()
-    st.pyplot(fig)
+    st.pyplot(fig, clear_figure=True)
+
+
+
+
 
 def run_momentum(ticker, start_date, end_date, cash, commission, mom_period, mom_threshold, stop_loss_pct, take_profit_pct, enable_shorting, enable_stop_loss, enable_take_profit):
     MomentumStrategy.mom_period = mom_period
