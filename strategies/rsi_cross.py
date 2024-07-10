@@ -69,13 +69,10 @@ class RsiCross(Strategy):
                 self.position_type = 'short'
 
 
-# Set global font properties if possible
-plt.rcParams['font.family'] = 'serif'
-plt.rcParams['font.serif'] = ['Times New Roman']
+font_path = "/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman.ttf"  # Adjust the path as necessary
+font_properties = fm.FontProperties(fname=font_path)
 
 def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
-    plt.rcParams['font.family'] = 'Times New Roman'
-
     data = data[data['Volume'] > 0]
     data.reset_index(inplace=True)
 
@@ -113,26 +110,28 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     for spine in ax2.spines.values():
         spine.set_visible(False)
 
-    ax1.plot(data.index, data['Close'], label='Price', color='blue')
-    ax1.set_ylabel('Price', color='white')
-    ax1.legend()
+    # Plot the data
+    line1, = ax1.plot(data.index, data['Close'], label='Price', color='blue')
+    ax1.set_ylabel('Price', fontproperties=font_properties, color='white')
+    ax1.legend(facecolor='white', framealpha=0.5)
     ax1.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
     ax1.grid(False, axis='x')
 
-    ax2.plot(data.index, rsi, label='RSI', color='purple')
-    ax2.plot(data.index, short_rsi, label=f'RSI SMA({rsi_sma_short})', color='orange')
-    ax2.plot(data.index, long_rsi, label=f'RSI SMA({rsi_sma_long})', color='green')
-    ax2.set_ylabel('RSI', color='white')
+    line2, = ax2.plot(data.index, rsi, label='RSI', color='purple')
+    line3, = ax2.plot(data.index, short_rsi, label=f'RSI SMA({rsi_sma_short})', color='orange')
+    line4, = ax2.plot(data.index, long_rsi, label=f'RSI SMA({rsi_sma_long})', color='green')
+    ax2.set_ylabel('RSI', fontproperties=font_properties, color='white')
     ax2.set_ylim(-5, 105)
-    ax2.legend()
+    ax2.legend(facecolor='white', framealpha=0.5)
     ax2.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
     ax2.grid(False, axis='x')
 
-    plt.title('RSI Cross Visualization', color='white')
-    plt.xlabel('Time', color='white')
+    # Set titles and labels
+    plt.title('RSI Cross Visualization', fontproperties=font_properties, color='white')
+    plt.xlabel('Time', fontproperties=font_properties, color='white')
 
     ax1.set_xticks([data[data['Date'] == date].index[0] for date in daily_indices])
-    ax1.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30, color='white')
+    ax1.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30, fontproperties=font_properties, color='white')
 
     # Change tick colors to white
     ax1.tick_params(axis='x', colors='white')
@@ -144,6 +143,18 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     plt.tight_layout()
 
     st.pyplot(fig, clear_figure=True)
+
+# Example data for testing
+np.random.seed(0)
+dates = pd.date_range('2020-01-01', periods=100)
+data = pd.DataFrame({
+    'Datetime': dates,
+    'Close': np.cumsum(np.random.randn(100)) + 100,
+    'Volume': np.random.randint(1, 1000, 100)
+})
+data.set_index('Datetime', inplace=True)
+
+rsi_cross_viz(data)
 
 
 
