@@ -88,8 +88,8 @@ def sma_cross_viz(data, n1=10, n2=20, trades=None):
     for spine in ax.spines.values():
         spine.set_visible(False)
 
-    ax.plot(data.index[start_idx:], data['Close'][start_idx:], label='Price', color='#00A86B')  # Flashier pine green
-    ax.plot(data.index[start_idx:], short_sma[start_idx - n1 + 1:], label=f'SMA({n1})', color='orange')
+    ax.plot(data.index[start_idx:], data['Close'][start_idx:], label='Price', color='cyan')
+    ax.plot(data.index[start_idx:], short_sma[start_idx - n1 + 1:], label=f'SMA({n1})', color='yellow')
     ax.plot(data.index[start_idx:], long_sma[start_idx - n2 + 1:], label=f'SMA({n2})', color='green')
 
     # Plot trade markers if trades data is provided
