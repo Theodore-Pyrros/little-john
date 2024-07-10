@@ -3,6 +3,7 @@ from backtesting import Backtest, Strategy
 import matplotlib.dates as mdates
 import streamlit as st
 
+import matplotlib.font_manager as fm
 
 def display_metrics(output):
     metrics = ['Start', 'End', 'Duration', 'Exposure Time [%]', 'Equity Final [$]', 'Equity Peak [$]', 
