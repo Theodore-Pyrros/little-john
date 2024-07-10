@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 from backtesting import Backtest, Strategy
 import matplotlib.dates as mdates
 import streamlit as st
-from matplotlib import rc_params_from_file
 
 
 def display_metrics(output):
@@ -21,9 +20,10 @@ def display_metrics(output):
     
     return result
 
-# Load the custom matplotlibrc file
-custom_rc_params = rc_params_from_file('.config/matplotlibrc')
-plt.rcParams.update(custom_rc_params)
+
+
+import matplotlib.pyplot as plt
+plt.rcParams["font.family"] = "Serif"
 
 def plot_strat_perf(output, title):
     if '_equity_curve' not in output:
