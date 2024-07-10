@@ -22,8 +22,6 @@ def display_metrics(output):
 
 
 def plot_strat_perf(output, title):
-    plt.rcParams.update({'font.family': 'serif'})
-
     if '_equity_curve' not in output:
         st.error("Equity curve data not available. The backtest may not have completed successfully.")
         return
@@ -47,9 +45,9 @@ def plot_strat_perf(output, title):
 
     fig, ax = plt.subplots(figsize=(14, 5))
     ax.plot(trading_day_equity.index, trading_day_equity['Equity'], label='Equity')
-    ax.set_title(title)
-    ax.set_xlabel('Date')
-    ax.set_ylabel('Equity')
+    ax.set_title(title, fontname='Serif')
+    ax.set_xlabel('Date', fontname='Serif')
+    ax.set_ylabel('Equity', fontname='Serif')
     ax.legend()
     ax.grid(True)
     
