@@ -71,7 +71,6 @@ class RsiCross(Strategy):
 plt.rcParams['font.family'] = 'serif'
 plt.rcParams['font.serif'] = ['Times New Roman']
 
-
 def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     data = data[data['Volume'] > 0]
     data.reset_index(inplace=True)
@@ -112,7 +111,7 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
 
     line1, = ax1.plot(data.index, data['Close'], label='Price', color='blue')
     ax1.set_ylabel('Price')
-    ax1.legend()
+    ax1.legend(facecolor='white', framealpha=0.5)
     ax1.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
     ax1.grid(False, axis='x')
 
@@ -121,7 +120,7 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     line4, = ax2.plot(data.index, long_rsi, label=f'RSI SMA({rsi_sma_long})', color='green')
     ax2.set_ylabel('RSI')
     ax2.set_ylim(-5, 105)
-    ax2.legend()
+    ax2.legend(facecolor='white', framealpha=0.5)
     ax2.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
     ax2.grid(False, axis='x')
 
