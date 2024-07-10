@@ -7,6 +7,8 @@ from backtesting.lib import crossover
 from data_handler import fetch_data
 from utils import run_backtest, plot_strat_perf, display_metrics
 
+import matplotlib.font_manager as fm
+
 def ema(data, period):
     alpha = 2 / (period + 1)
     result = np.zeros_like(data)
@@ -63,6 +65,12 @@ class MACDStrategy(Strategy):
                 self.entry_price = self.data.Close[-1]
                 self.position_type = 'short'
 
+
+# Define font properties
+font_path = "Times New Roman.ttf"
+font_properties = fm.FontProperties(fname=font_path, size=14)
+title_font_properties = fm.FontProperties(fname=font_path, size=16, weight='bold')
+
 def macd_viz(data, macd_fast=12, macd_slow=26, macd_signal=9):
     data = data[data['Volume'] > 0].copy()
     data.reset_index(inplace=True)
@@ -78,31 +86,57 @@ def macd_viz(data, macd_fast=12, macd_slow=26, macd_signal=9):
     data['Date'] = pd.to_datetime(data['Datetime']).dt.date
     daily_indices = data.groupby('Date').first().index
     
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 10), sharex=True)
-    
-    # Plotting the price on the upper subplot
-    ax1.plot(data.index, data['Close'], label='Price', color='blue')
-    ax1.set_ylabel('Price', color='blue')
-    ax1.set_title('MACD Strategy Visualization')
-    ax1.grid(True)
-    ax1.legend(loc='upper left')
-    
-    # Plotting MACD on the lower subplot
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 6), sharex=True, facecolor='none')
+
+    # Set transparent background
+    fig.patch.set_alpha(0)
+    ax1.set_facecolor('none')
+    ax2.set_facecolor('none')
+
+    # Remove the outline of the axes
+    for spine in ax1.spines.values():
+        spine.set_visible(False)
+    for spine in ax2.spines.values():
+        spine.set_visible(False)
+
+    ax1.plot(data.index, data['Close'], label='Price', color='#00A86B')  # Flashier pine green
+    ax1.set_ylabel('Price', fontproperties=font_properties, color='white')
+    ax1.legend(prop=font_properties, facecolor='white', framealpha=0.5)
+    ax1.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
+    ax1.grid(False, axis='x')
+
     ax2.plot(data.index, data['macd'], label='MACD', color='green')
     ax2.plot(data.index, data['signal'], label='Signal', color='red')
     ax2.bar(data.index, data['histogram'], label='Histogram', color='gray', alpha=0.3)
-    ax2.set_ylabel('MACD')
-    ax2.grid(True)
-    ax2.legend(loc='upper left')
+    ax2.set_xlabel('Time', fontproperties=font_properties, color='white')
+    ax2.set_ylabel('MACD', fontproperties=font_properties, color='white')
+    ax2.legend(prop=font_properties, facecolor='white', framealpha=0.5)
+    ax2.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
+    ax2.grid(False, axis='x')
     
-    plt.xticks(
-        ticks=[data[data['Date'] == date].index[0] for date in daily_indices],
-        labels=[date.strftime('%Y-%m-%d') for date in daily_indices],
-        rotation=30
-    )
+    ax1.set_xticks([data[data['Date'] == date].index[0] for date in daily_indices])
+    ax1.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30, fontproperties=font_properties, color='white')
     
+    ax1.tick_params(axis='x', colors='white', labelsize=12)
+    ax1.tick_params(axis='y', colors='white', labelsize=12)
+    ax2.tick_params(axis='x', colors='white', labelsize=12)
+    ax2.tick_params(axis='y', colors='white', labelsize=12)
+    
+    for label in ax1.get_xticklabels() + ax1.get_yticklabels():
+        label.set_fontproperties(font_properties)
+    for label in ax2.get_xticklabels() + ax2.get_yticklabels():
+        label.set_fontproperties(font_properties)
+
+    fig.suptitle('MACD Strategy Visualization', fontproperties=title_font_properties, color='white')
+    
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.9, bottom=0.15)
     plt.tight_layout()
-    st.pyplot(fig)
+    st.pyplot(fig, clear_figure=True)
+
+
+
+
+
 
 def run_macd(ticker, start_date, end_date, cash, commission, macd_fast, macd_slow, macd_signal, stop_loss_pct, take_profit_pct, enable_shorting, enable_stop_loss, enable_take_profit):
     MACDStrategy.macd_fast = macd_fast
