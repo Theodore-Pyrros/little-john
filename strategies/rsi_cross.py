@@ -90,7 +90,7 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     data['Date'] = data['Datetime'].dt.date
     daily_indices = data.groupby('Date').first().index
 
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 6), sharex=True)
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 6), sharex=True, facecolor='none')
     
     ax1.plot(data.index, data['Close'], label='Price', color='blue')
     ax1.set_ylabel('Price')
@@ -105,12 +105,17 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     ax2.legend()
     ax2.grid(True)
 
-    plt.title('RSI Cross Visualization')
-    plt.xlabel('Time')
+    plt.title('RSI Cross Visualization', color='black')
+    plt.xlabel('Time', color='black')
     
     ax1.set_xticks([data[data['Date'] == date].index[0] for date in daily_indices])
-    ax1.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30)
+    ax1.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30, color='black')
 
+    # Adjust the transparency and margins
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.15)
+    plt.gcf().set_facecolor('none')
+    fig.patch.set_alpha(0)
+    
     plt.tight_layout()
     st.pyplot(fig)
 
