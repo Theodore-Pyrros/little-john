@@ -98,8 +98,8 @@ def obv_viz(data, obv_periods=20):
     ax1.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
     ax1.grid(False, axis='x')
 
-    ax2.plot(data.index, obv, label='OBV', color='orange')
-    ax2.plot(data.index, obv_sma, label=f'OBV SMA({obv_periods})', color='red')
+    ax2.plot(data.index, obv, label='OBV', color='purple')
+    ax2.plot(data.index, obv_sma, label=f'OBV SMA({obv_periods})', color='yellow')
     ax2.set_xlabel('Time', fontproperties=font_properties, color='white')
     ax2.set_ylabel('OBV', fontproperties=font_properties, color='white')
     ax2.legend(prop=font_properties, facecolor='white', framealpha=0.5)
