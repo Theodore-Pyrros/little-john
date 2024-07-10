@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from backtesting import Backtest, Strategy
 import matplotlib.dates as mdates
 import streamlit as st
+from matplotlib import rc_params_from_file
 
 
 def display_metrics(output):
@@ -21,7 +22,7 @@ def display_metrics(output):
     return result
 
 # Load the custom matplotlibrc file
-custom_rc_params = plt.rc_params_from_file('.config/matplotlibrc')
+custom_rc_params = rc_params_from_file('.config/matplotlibrc')
 plt.rcParams.update(custom_rc_params)
 
 def plot_strat_perf(output, title):
