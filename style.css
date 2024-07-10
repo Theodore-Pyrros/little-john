@@ -38,6 +38,21 @@ p, span, div {
     font-size: small;
 }
 
+.stDateInput label {
+    font-family: 'Times New Roman', serif;
+}
+
+.stNumberInput label {
+    font-family: 'Times New Roman', serif;
+}
+
+.stDateInput div {
+    font-family: 'Times New Roman', serif;
+}
+
+.stNumberInput div {
+    font-family: 'Times New Roman', serif;
+}
 
 
 
