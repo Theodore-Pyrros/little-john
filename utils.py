@@ -57,6 +57,18 @@ def plot_strat_perf(output, title):
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
     
     plt.tight_layout()
+    plt.rcParams.update({
+        'font.size': 10,
+        'font.family': 'serif',
+        'font.serif': 'Times New Roman',
+        'axes.titlesize': 14,
+        'axes.titleweight': 'bold',
+        'axes.labelsize': 12,
+        'axes.labelweight': 'bold',
+        'xtick.labelsize': 10,
+        'ytick.labelsize': 10,
+        'legend.fontsize': 10
+    })
     st.pyplot(fig)
 
 
