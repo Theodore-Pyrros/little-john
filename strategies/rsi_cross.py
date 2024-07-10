@@ -69,6 +69,10 @@ class RsiCross(Strategy):
                 self.position_type = 'short'
 
 
+# Set global font properties if possible
+plt.rcParams['font.family'] = 'serif'
+plt.rcParams['font.serif'] = ['Times New Roman']
+
 def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     plt.rcParams['font.family'] = 'Times New Roman'
 
