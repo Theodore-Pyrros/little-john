@@ -62,7 +62,7 @@ def main():
             end_date = st.date_input('End Date', 
                                      value=datetime.now(),
                                      min_value=start_date,
-                                     datetime.now())
+                                     max_value=datetime.now())
             cash = st.number_input('Initial Cash', min_value=1000, max_value=1000000, 
                                    value=10000)
             commission = st.slider('Commission (%)', min_value=0.0, max_value=1.0, 
