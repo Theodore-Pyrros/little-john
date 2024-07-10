@@ -56,7 +56,7 @@ def plot_strat_perf(output, title):
         'legend.fontsize': 10
     })
 
-    fig, ax = plt.subplots(figsize=(14, 7))
+    fig, ax = plt.subplots(figsize=(14, 4))
     ax.plot(trading_day_equity.index, trading_day_equity['Equity'], label='Equity')
     ax.set_title(title)
     ax.set_xlabel('Date')
