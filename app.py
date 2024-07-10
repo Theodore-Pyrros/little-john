@@ -40,6 +40,8 @@ def main():
     col1, col2 = st.columns([1, 4])
 
     with col1:
+        st.subheader(' ')  # Adding an empty space subheader
+        
         strategy_groups = {
             'Momentum': ['RSI Cross', 'MACD', 'Stochastic', 'Momentum'],
             'Trend': ['SMA Cross', 'ADX', 'DPO', 'CCI'],
