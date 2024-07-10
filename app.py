@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime, timedelta
+import plotly.graph_objects as go
 
 from data_handler import fetch_data
 from utils import display_metrics, plot_strat_perf
