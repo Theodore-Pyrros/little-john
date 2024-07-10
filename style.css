@@ -39,19 +39,19 @@ p, span, div {
 }
 
 .stDateInput label {
-    font-family: 'Times New Roman', serif;
+    font-family: serif !important;
 }
 
 .stNumberInput label {
-    font-family: 'Times New Roman', serif;
+    font-family: serif !important;
 }
 
 .stDateInput div {
-    font-family: 'Times New Roman', serif;
+    font-family: serif !important;
 }
 
 .stNumberInput div {
-    font-family: 'Times New Roman', serif;
+    font-family: serif !important;
 }
 
 
