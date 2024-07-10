@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 from backtesting import Backtest, Strategy
 import matplotlib.dates as mdates
 import streamlit as st
-import mplcursors
 
 
 
