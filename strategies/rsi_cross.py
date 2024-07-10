@@ -66,9 +66,11 @@ class RsiCross(Strategy):
                 self.position_type = 'short'
 
 def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
-    data = data[data['Volume'] > 0]    
+    plt.rcParams['font.family'] = 'Times New Roman'
+
+    data = data[data['Volume'] > 0]
     data.reset_index(inplace=True)
-    
+
     if 'Datetime' not in data.columns:
         data['Datetime'] = data.index
 
@@ -77,10 +79,10 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     delta = close.diff()
     gain = delta.where(delta > 0, 0)
     loss = -delta.where(delta < 0, 0)
-    
+
     avg_gain = gain.rolling(window=rsi_period, min_periods=1).mean()
     avg_loss = loss.rolling(window=rsi_period, min_periods=1).mean()
-    
+
     rs = avg_gain / avg_loss
     rsi = 100 - (100 / (1 + rs))
     rsi = rsi.fillna(50)  # Fill NaN values with 50 (neutral)
@@ -91,33 +93,39 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     daily_indices = data.groupby('Date').first().index
 
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 6), sharex=True, facecolor='none')
-    
+
+    # Set transparent background
+    fig.patch.set_alpha(0)
+    ax1.set_facecolor('none')
+    ax2.set_facecolor('none')
+
     ax1.plot(data.index, data['Close'], label='Price', color='blue')
-    ax1.set_ylabel('Price')
+    ax1.set_ylabel('Price', color='black')
     ax1.legend()
-    ax1.grid(True)
+    ax1.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
+    ax1.grid(False, axis='x')
 
     ax2.plot(data.index, rsi, label='RSI', color='purple')
     ax2.plot(data.index, short_rsi, label=f'RSI SMA({rsi_sma_short})', color='orange')
     ax2.plot(data.index, long_rsi, label=f'RSI SMA({rsi_sma_long})', color='green')
-    ax2.set_ylabel('RSI')
+    ax2.set_ylabel('RSI', color='black')
     ax2.set_ylim(-5, 105)
     ax2.legend()
-    ax2.grid(True)
+    ax2.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
+    ax2.grid(False, axis='x')
 
     plt.title('RSI Cross Visualization', color='black')
     plt.xlabel('Time', color='black')
-    
+
     ax1.set_xticks([data[data['Date'] == date].index[0] for date in daily_indices])
     ax1.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30, color='black')
 
-    # Adjust the transparency and margins
     plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.15)
-    plt.gcf().set_facecolor('none')
-    fig.patch.set_alpha(0)
-    
     plt.tight_layout()
+
     st.pyplot(fig)
+
+
 
 def run_rsi_cross(ticker, start_date, end_date, cash, commission, rsi_sma_short, rsi_sma_long, rsi_period, stop_loss_pct, take_profit_pct, enable_shorting, enable_stop_loss, enable_take_profit):
     RsiCross.rsi_sma_short = rsi_sma_short
