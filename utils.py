@@ -21,42 +21,76 @@ def display_metrics(output):
     return result
 
 
-def plot_strat_perf(output, title):
-    if '_equity_curve' not in output:
-        st.error("Equity curve data not available. The backtest may not have completed successfully.")
-        return
+def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
+    plt.rcParams['font.family'] = 'Times New Roman'
 
-    equity_curve = output['_equity_curve']
-    
-    if equity_curve.empty:
-        st.warning("Equity curve is empty. No trades may have been executed.")
-        return
+    data = data[data['Volume'] > 0]
+    data.reset_index(inplace=True)
 
-    # Filter for trading days at market close (4:00 PM)
-    trading_day_equity = equity_curve[
-        (equity_curve.index.dayofweek < 5) &  # Monday = 0, Friday = 4
-        (equity_curve.index.hour == 15) &     # 3:00 PM (15:00)
-        (equity_curve.index.minute == 55)     # Last data point before 4:00 PM
-    ]
-    
-    if trading_day_equity.empty:
-        st.warning("No data points match the filtering criteria. Displaying full equity curve.")
-        trading_day_equity = equity_curve
+    if 'Datetime' not in data.columns:
+        data['Datetime'] = data.index
 
-    fig, ax = plt.subplots(figsize=(14, 7))
-    ax.plot(trading_day_equity.index, trading_day_equity['Equity'], label='Equity')
-    ax.set_title(title)
-    ax.set_xlabel('Date')
-    ax.set_ylabel('Equity')
-    ax.legend()
-    ax.grid(True)
-    
-    fig.autofmt_xdate()
-    
-    # Format the x-axis to display dates in YYYY-MM-DD format
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-    
+    # Calculate RSI
+    close = data['Close']
+    delta = close.diff()
+    gain = delta.where(delta > 0, 0)
+    loss = -delta.where(delta < 0, 0)
+
+    avg_gain = gain.rolling(window=rsi_period, min_periods=1).mean()
+    avg_loss = loss.rolling(window=rsi_period, min_periods=1).mean()
+
+    rs = avg_gain / avg_loss
+    rsi = 100 - (100 / (1 + rs))
+    rsi = rsi.fillna(50)  # Fill NaN values with 50 (neutral)
+    short_rsi = rsi.rolling(window=rsi_sma_short, min_periods=1).mean()
+    long_rsi = rsi.rolling(window=rsi_sma_long, min_periods=1).mean()
+
+    data['Date'] = data['Datetime'].dt.date
+    daily_indices = data.groupby('Date').first().index
+
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 6), sharex=True, facecolor='none')
+
+    # Set transparent background
+    fig.patch.set_alpha(0)
+    ax1.set_facecolor('none')
+    ax2.set_facecolor('none')
+
+    # Remove the outline of the axes
+    for spine in ax1.spines.values():
+        spine.set_visible(False)
+    for spine in ax2.spines.values():
+        spine.set_visible(False)
+
+    ax1.plot(data.index, data['Close'], label='Price', color='blue')
+    ax1.set_ylabel('Price', color='white')
+    ax1.legend()
+    ax1.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
+    ax1.grid(False, axis='x')
+
+    ax2.plot(data.index, rsi, label='RSI', color='purple')
+    ax2.plot(data.index, short_rsi, label=f'RSI SMA({rsi_sma_short})', color='orange')
+    ax2.plot(data.index, long_rsi, label=f'RSI SMA({rsi_sma_long})', color='green')
+    ax2.set_ylabel('RSI', color='white')
+    ax2.set_ylim(-5, 105)
+    ax2.legend()
+    ax2.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
+    ax2.grid(False, axis='x')
+
+    plt.title('RSI Cross Visualization', color='white')
+    plt.xlabel('Time', color='white')
+
+    ax1.set_xticks([data[data['Date'] == date].index[0] for date in daily_indices])
+    ax1.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30, color='white')
+
+    # Change tick colors to white
+    ax1.tick_params(axis='x', colors='white')
+    ax1.tick_params(axis='y', colors='white')
+    ax2.tick_params(axis='x', colors='white')
+    ax2.tick_params(axis='y', colors='white')
+
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.15)
     plt.tight_layout()
+
     st.pyplot(fig)
 
 
