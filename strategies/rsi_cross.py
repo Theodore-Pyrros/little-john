@@ -117,7 +117,8 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     fig.patch.set_alpha(0)
     
     plt.tight_layout()
-    st.pyplot(fig)
+    # st.pyplot(fig)
+    fig.show()
 
 def run_rsi_cross(ticker, start_date, end_date, cash, commission, rsi_sma_short, rsi_sma_long, rsi_period, stop_loss_pct, take_profit_pct, enable_shorting, enable_stop_loss, enable_take_profit):
     RsiCross.rsi_sma_short = rsi_sma_short
