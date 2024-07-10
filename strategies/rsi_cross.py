@@ -9,6 +9,7 @@ from data_handler import fetch_data
 from utils import run_backtest, plot_strat_perf, display_metrics
 
 import plotly.graph_objs as go
+import matplotlib.font_manager as fm
 import mplcursors
 
 class RsiCross(Strategy):
