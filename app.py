@@ -78,7 +78,6 @@ def main():
 
         # Get strategy-specific parameters
         strategy_params = get_strategy_params(strategy)
-        enable_shorting = st.checkbox('Enable Shorting', value=True)
             
         with st.expander("Stop Loss / Take Profit", expanded=True):
             stop_loss_pct = st.slider('Stop Loss %', min_value=0.0, max_value=10.0, 
@@ -87,6 +86,7 @@ def main():
                                         value=5.0, step=0.1)
             enable_stop_loss = st.checkbox('Enable Stop Loss', value=True)
             enable_take_profit = st.checkbox('Enable Take Profit', value=True)
+            enable_shorting = st.checkbox('Enable Shorting', value=True)
 
         # Add option to save current strategy
         with st.expander("Store Strategy", expanded=True):
