@@ -99,11 +99,11 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     ax1.set_facecolor('none')
     ax2.set_facecolor('none')
 
-    # Set the outline color to white for axes
+    # Remove the outline of the axes
     for spine in ax1.spines.values():
-        spine.set_edgecolor('white')
+        spine.set_visible(False)
     for spine in ax2.spines.values():
-        spine.set_edgecolor('white')
+        spine.set_visible(False)
 
     ax1.plot(data.index, data['Close'], label='Price', color='blue')
     ax1.set_ylabel('Price', color='white')
