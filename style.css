@@ -27,7 +27,8 @@ p, span, div {
 }
 
 .footer {
-    position: fixed;
+    position: relative;
+    min-height: 100vh;
     left: 0;
     bottom: 0;
     width: 100%;
