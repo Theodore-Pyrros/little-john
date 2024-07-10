@@ -25,6 +25,8 @@ def display_metrics(output):
 
 
 def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
+    plt.rcParams['font.family'] = 'Times New Roman'
+
     data = data[data['Volume'] > 0]
     data.reset_index(inplace=True)
 
@@ -63,7 +65,7 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
         spine.set_visible(False)
 
     ax1.plot(data.index, data['Close'], label='Price', color='blue')
-    ax1.set_ylabel('Price')
+    ax1.set_ylabel('Price', color='white')
     ax1.legend()
     ax1.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
     ax1.grid(False, axis='x')
@@ -71,17 +73,23 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     ax2.plot(data.index, rsi, label='RSI', color='purple')
     ax2.plot(data.index, short_rsi, label=f'RSI SMA({rsi_sma_short})', color='orange')
     ax2.plot(data.index, long_rsi, label=f'RSI SMA({rsi_sma_long})', color='green')
-    ax2.set_ylabel('RSI')
+    ax2.set_ylabel('RSI', color='white')
     ax2.set_ylim(-5, 105)
     ax2.legend()
     ax2.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
     ax2.grid(False, axis='x')
 
-    plt.title('RSI Cross Visualization')
-    plt.xlabel('Time')
+    plt.title('RSI Cross Visualization', color='white')
+    plt.xlabel('Time', color='white')
 
     ax1.set_xticks([data[data['Date'] == date].index[0] for date in daily_indices])
-    ax1.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30)
+    ax1.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30, color='white')
+
+    # Change tick colors to white
+    ax1.tick_params(axis='x', colors='white')
+    ax1.tick_params(axis='y', colors='white')
+    ax2.tick_params(axis='x', colors='white')
+    ax2.tick_params(axis='y', colors='white')
 
     plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.15)
     plt.tight_layout()
