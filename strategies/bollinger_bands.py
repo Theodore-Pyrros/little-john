@@ -61,6 +61,13 @@ class BollingerBandsStrategy(Strategy):
                 self.entry_price = self.data.Close[-1]
                 self.position_type = 'short'
 
+
+
+# Define font properties
+font_path = "Times New Roman.ttf"
+font_properties = fm.FontProperties(fname=font_path, size=14)
+title_font_properties = fm.FontProperties(fname=font_path, size=16, weight='bold')
+
 def bollinger_bands_viz(data, bb_period=20, bb_std_dev=2):
     data = data[data['Volume'] > 0]
     data.reset_index(inplace=True)
@@ -77,23 +84,46 @@ def bollinger_bands_viz(data, bb_period=20, bb_std_dev=2):
     data['Date'] = data['Datetime'].dt.date
     daily_indices = data.groupby('Date').first().index
 
-    fig, ax = plt.subplots(figsize=(14, 7))
-    
-    ax.plot(data.index, data['Close'], label='Price', color='blue')
+    fig, ax = plt.subplots(figsize=(14, 7), facecolor='none')
+
+    # Set transparent background
+    fig.patch.set_alpha(0)
+    ax.set_facecolor('none')
+
+    # Remove the outline of the axes
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+
+    ax.plot(data.index, data['Close'], label='Price', color='#00A86B')  # Flashier pine green
     ax.plot(data.index, upper_band, label='Upper Bollinger Band', linestyle='--', color='red')
     ax.plot(data.index, lower_band, label='Lower Bollinger Band', linestyle='--', color='green')
     ax.fill_between(data.index, lower_band, upper_band, color='gray', alpha=0.1)
 
-    ax.set_title('Bollinger Bands Visualization')
-    ax.set_xlabel('Time')
-    ax.set_ylabel('Price')
+    ax.set_ylabel('Price', fontproperties=font_properties, color='white')
+    ax.legend(prop=font_properties, facecolor='white', framealpha=0.5)
+    ax.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
+    ax.grid(False, axis='x')
+    
     ax.set_xticks([data[data['Date'] == date].index[0] for date in daily_indices])
-    ax.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30)
+    ax.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30, fontproperties=font_properties, color='white')
     
-    ax.legend()
-    ax.grid(True)
+    ax.tick_params(axis='x', colors='white', labelsize=12)
+    ax.tick_params(axis='y', colors='white', labelsize=12)
+
+    for label in ax.get_xticklabels() + ax.get_yticklabels():
+        label.set_fontproperties(font_properties)
+
+    fig.suptitle('Bollinger Bands Visualization', fontproperties=title_font_properties, color='white')
+    ax.set_xlabel('Time', fontproperties=font_properties, color='white')
     
-    st.pyplot(fig)
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.9, bottom=0.15)
+    plt.tight_layout()
+    st.pyplot(fig, clear_figure=True)
+
+
+
+
+
 
 def run_bollinger_bands(ticker, start_date, end_date, cash, commission, bb_period, bb_std_dev, stop_loss_pct, take_profit_pct, enable_shorting, enable_stop_loss, enable_take_profit):
     BollingerBandsStrategy.bb_period = bb_period
