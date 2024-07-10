@@ -35,7 +35,7 @@ def load_css(style):
 load_css("style.css")
 
 def main():
-    st.title('Little John 3')
+    st.title(:white['Little John 3'])
 
     col1, col2 = st.columns([1, 3])
 
