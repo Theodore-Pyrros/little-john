@@ -51,8 +51,6 @@ def main():
         sixty_days_ago = datetime.now() - timedelta(days=59)
         ten_days_ago = datetime.now() - timedelta(days=10)
 
-        with st.subheader(' ')
-
         with st.expander("Timeframe | Cash | Commission", expanded=True):
             start_date = st.date_input('Start Date', 
                                        value=ten_days_ago,
