@@ -55,17 +55,18 @@ def main():
         ten_days_ago = datetime.now() - timedelta(days=10)
 
         with st.expander("Timeframe | Cash | Commission", expanded=True):
+            end_date = st.date_input('End Date', 
+                                     value=datetime.now(),
+                                     min_value=sixty_days_ago + timedelta(days=1),
+                                     max_value=datetime.now())
+
+            max_start_date = end_date - timedelta(days=1)
+            
             start_date = st.date_input('Start Date', 
                                        value=ten_days_ago,
                                        min_value=sixty_days_ago,
-                                       max_value=datetime.now())
-
-            min_end_date = start_date + timedelta(days=1)
+                                       max_start_date)
             
-            end_date = st.date_input('End Date', 
-                                     value=datetime.now(),
-                                     min_value=min_end_date,
-                                     max_value=datetime.now())
             cash = st.number_input('Initial Cash', min_value=1000, max_value=1000000, 
                                    value=10000)
             commission = st.slider('Commission (%)', min_value=0.0, max_value=1.0, 
