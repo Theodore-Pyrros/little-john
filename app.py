@@ -53,13 +53,15 @@ def main():
 
         sixty_days_ago = datetime.now() - timedelta(days=59)
         ten_days_ago = datetime.now() - timedelta(days=10)
-        min_end_date = start_date + timedelta(days=1)
 
         with st.expander("Timeframe | Cash | Commission", expanded=True):
             start_date = st.date_input('Start Date', 
                                        value=ten_days_ago,
                                        min_value=sixty_days_ago,
                                        max_value=datetime.now())
+
+            min_end_date = start_date + timedelta(days=1)
+            
             end_date = st.date_input('End Date', 
                                      value=datetime.now(),
                                      min_value=min_end_date,
