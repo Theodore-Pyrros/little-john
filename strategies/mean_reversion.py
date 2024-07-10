@@ -91,7 +91,7 @@ def mean_reversion_viz(data, mr_period=20, mr_entry_std=2.0, mr_exit_std=0.5):
     for spine in ax.spines.values():
         spine.set_visible(False)
 
-    ax.plot(data.index, data['Close'], label='Price', color='#00A86B')  # Flashier pine green
+    ax.plot(data.index, data['Close'], label='Price', color='orange')  # Flashier pine green
     ax.plot(data.index, data['SMA'], label=f'SMA({mr_period})', color='green')
     ax.plot(data.index, data['Upper_Entry'], label='Upper Entry', color='red', linestyle='--')
     ax.plot(data.index, data['Lower_Entry'], label='Lower Entry', color='cyan', linestyle='--')
