@@ -89,7 +89,7 @@ def dpo_viz(data, dpo_period=20, dpo_threshold=0):
     ax1.grid(False, axis='x')
 
     ax2.plot(data.index, dpo, label='DPO', color='purple')
-    ax2.axhline(y=0, color='red', linestyle='--', label='Zero Line')
+    ax2.axhline(y=0, color='cyan', linestyle='--', label='Zero Line')
     ax2.axhline(y=dpo_threshold, color='green', linestyle='--', label=f'Upper Threshold ({dpo_threshold})')
     ax2.axhline(y=-dpo_threshold, color='yellow', linestyle='--', label=f'Lower Threshold ({-dpo_threshold})')
     ax2.set_xlabel('Time', fontproperties=font_properties, color='white')
