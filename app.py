@@ -36,7 +36,6 @@ load_css("style.css")
 
 def main():
     st.title('Little John 3')
-    st.markdown('<h1 style="color: white;">Little John 3</h1>', unsafe_allow_html=True)
 
     col1, col2 = st.columns([1, 3])
 
