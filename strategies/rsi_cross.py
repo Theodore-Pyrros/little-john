@@ -99,19 +99,23 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     ax1.set_facecolor('none')
     ax2.set_facecolor('none')
 
+    # Set the outline color to white
+    fig.patch.set_edgecolor('white')
+    fig.patch.set_linewidth(1)
+
     ax1.plot(data.index, data['Close'], label='Price', color='white')
     ax1.set_ylabel('Price', color='white')
     ax1.legend()
-    ax1.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
+    ax1.grid(True, axis='y', color='white', linestyle='-', linewidth=0.5)
     ax1.grid(False, axis='x')
 
-    ax2.plot(data.index, rsi, label='RSI', color='white')
+    ax2.plot(data.index, rsi, label='RSI', color='purple')
     ax2.plot(data.index, short_rsi, label=f'RSI SMA({rsi_sma_short})', color='orange')
     ax2.plot(data.index, long_rsi, label=f'RSI SMA({rsi_sma_long})', color='green')
     ax2.set_ylabel('RSI', color='white')
     ax2.set_ylim(-5, 105)
     ax2.legend()
-    ax2.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
+    ax2.grid(True, axis='y', color='white', linestyle='-', linewidth=0.5)
     ax2.grid(False, axis='x')
 
     plt.title('RSI Cross Visualization', color='white')
