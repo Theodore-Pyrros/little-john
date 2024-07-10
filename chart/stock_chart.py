@@ -71,7 +71,7 @@ def plot_stock_price_and_volume(ticker, start_date, end_date):
             side='right'
         ),
         showlegend=False,
-        height=400,
+        height=200,
         hovermode='x unified'
     )
     
