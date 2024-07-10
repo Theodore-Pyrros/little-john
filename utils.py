@@ -22,6 +22,8 @@ def display_metrics(output):
 
 
 def plot_strat_perf(output, title):
+    plt.rcParams.update({'font.family': 'serif'})
+
     if '_equity_curve' not in output:
         st.error("Equity curve data not available. The backtest may not have completed successfully.")
         return
