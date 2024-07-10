@@ -8,6 +8,8 @@ from backtesting.test import SMA
 from data_handler import fetch_data
 from utils import run_backtest, plot_strat_perf, display_metrics
 
+import matplotlib.font_manager as fm
+
 class MeanReversion(Strategy):
     mr_period = 20  # lookback period for calculating mean
     mr_entry_std = 2.0  # number of standard deviations for entry
@@ -56,7 +58,13 @@ class MeanReversion(Strategy):
                 self.entry_price = self.data.Close[-1]
                 self.position_type = 'short'
 
-def mean_reversion_viz(data, mr_period=20,mr_entry_std=2.0,mr_exit_std=0.5):
+
+# Define font properties
+font_path = "Times New Roman.ttf"
+font_properties = fm.FontProperties(fname=font_path, size=14)
+title_font_properties = fm.FontProperties(fname=font_path, size=16, weight='bold')
+
+def mean_reversion_viz(data, mr_period=20, mr_entry_std=2.0, mr_exit_std=0.5):
     data = data[data['Volume'] > 0].copy()
     data.reset_index(inplace=True)
     
@@ -65,31 +73,54 @@ def mean_reversion_viz(data, mr_period=20,mr_entry_std=2.0,mr_exit_std=0.5):
     
     data['SMA'] = data['Close'].rolling(window=mr_period).mean()
     data['STD'] = data['Close'].rolling(window=mr_period).std()
-    data['Upper_Entry'] = data['SMA'] +mr_entry_std * data['STD']
-    data['Lower_Entry'] = data['SMA'] -mr_entry_std * data['STD']
-    data['Upper_Exit'] = data['SMA'] +mr_exit_std * data['STD']
-    data['Lower_Exit'] = data['SMA'] -mr_exit_std * data['STD']
+    data['Upper_Entry'] = data['SMA'] + mr_entry_std * data['STD']
+    data['Lower_Entry'] = data['SMA'] - mr_entry_std * data['STD']
+    data['Upper_Exit'] = data['SMA'] + mr_exit_std * data['STD']
+    data['Lower_Exit'] = data['SMA'] - mr_exit_std * data['STD']
     
     data['Date'] = data['Datetime'].dt.date
     daily_indices = data.groupby('Date').first().index
     
-    fig, ax = plt.subplots(figsize=(14, 7))
-    ax.plot(data.index, data['Close'], label='Price', color='blue')
-    ax.plot(data.index, data['SMA'], label=f'SMA({n})', color='orange')
+    fig, ax = plt.subplots(figsize=(14, 6), facecolor='none')
+
+    # Set transparent background
+    fig.patch.set_alpha(0)
+    ax.set_facecolor('none')
+
+    # Remove the outline of the axes
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+
+    ax.plot(data.index, data['Close'], label='Price', color='#00A86B')  # Flashier pine green
+    ax.plot(data.index, data['SMA'], label=f'SMA({mr_period})', color='green')
     ax.plot(data.index, data['Upper_Entry'], label='Upper Entry', color='red', linestyle='--')
-    ax.plot(data.index, data['Lower_Entry'], label='Lower Entry', color='green', linestyle='--')
+    ax.plot(data.index, data['Lower_Entry'], label='Lower Entry', color='cyan', linestyle='--')
     ax.plot(data.index, data['Upper_Exit'], label='Upper Exit', color='purple', linestyle=':')
-    ax.plot(data.index, data['Lower_Exit'], label='Lower Exit', color='brown', linestyle=':')
-    
-    ax.set_title('Mean Reversion Strategy Visualization')
-    ax.set_xlabel('Time')
-    ax.set_ylabel('Price')
+    ax.plot(data.index, data['Lower_Exit'], label='Lower Exit', color='yellow', linestyle=':')
+
+    ax.set_ylabel('Price', fontproperties=font_properties, color='white')
+    ax.legend(prop=font_properties, facecolor='white', framealpha=0.5)
+    ax.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
+    ax.grid(False, axis='x')
+
     ax.set_xticks([data[data['Date'] == date].index[0] for date in daily_indices])
-    ax.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30)
+    ax.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30, fontproperties=font_properties, color='white')
     
-    ax.legend()
-    ax.grid(True)
-    st.pyplot(fig)
+    ax.tick_params(axis='x', colors='white', labelsize=12)
+    ax.tick_params(axis='y', colors='white', labelsize=12)
+
+    for label in ax.get_xticklabels() + ax.get_yticklabels():
+        label.set_fontproperties(font_properties)
+
+    fig.suptitle('Mean Reversion Strategy Visualization', fontproperties=title_font_properties, color='white')
+    ax.set_xlabel('Time', fontproperties=font_properties, color='white')
+    
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.9, bottom=0.15)
+    plt.tight_layout()
+    st.pyplot(fig, clear_figure=True)
+
+
+
 
 def run_mean_reversion(ticker, start_date, end_date, cash, commission, mr_period,mr_entry_std,mr_exit_std, stop_loss_pct, take_profit_pct, enable_shorting, enable_stop_loss, enable_take_profit):
     MeanReversion.mr_period = mr_period
