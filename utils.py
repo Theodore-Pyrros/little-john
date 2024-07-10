@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from backtesting import Backtest, Strategy
 import matplotlib.dates as mdates
 import streamlit as st
+from matplotlib import rcParams
 
 
 def display_metrics(output):
