@@ -90,7 +90,7 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     data['Date'] = data['Datetime'].dt.date
     daily_indices = data.groupby('Date').first().index
 
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 10), sharex=True)
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 6), sharex=True)
     
     ax1.plot(data.index, data['Close'], label='Price', color='blue')
     ax1.set_ylabel('Price')
