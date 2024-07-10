@@ -1,0 +1,34 @@
+# Use the "serif" family for all text
+font.family: serif
+
+# Use "Times New Roman" for serif fonts
+font.serif: Times New Roman
+
+# Customize the font sizes
+axes.titlesize: 14
+axes.labelsize: 12
+xtick.labelsize: 10
+ytick.labelsize: 10
+legend.fontsize: 12
+
+# Bold font weight
+axes.titleweight: bold
+axes.labelweight: bold
+
+# Grid and background
+axes.grid: True
+grid.linestyle: --
+grid.color: #e5e5e5
+axes.facecolor: #f7f7f7
+
+# Line properties
+lines.linewidth: 2
+lines.markersize: 6
+
+# Date format
+date.autoformatter.year: %Y
+date.autoformatter.month: %Y-%m
+date.autoformatter.day: %Y-%m-%d
+date.autoformatter.hour: %H:%M
+date.autoformatter.minute: %H:%M
+date.autoformatter.second: %H:%M:%S
