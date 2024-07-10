@@ -80,7 +80,7 @@ def cci_viz(data, cci_period=20, cci_overbought=100, cci_oversold=-100):
     data['Date'] = data['Datetime'].dt.date
     daily_indices = data.groupby('Date').first().index
     
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 10), sharex=True, facecolor='none')
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 6), sharex=True, facecolor='none')
 
     # Set transparent background
     fig.patch.set_alpha(0)
@@ -100,7 +100,7 @@ def cci_viz(data, cci_period=20, cci_overbought=100, cci_oversold=-100):
     ax1.grid(False, axis='x')
 
     ax2.plot(data.index, cci, label='CCI', color='orange')
-    ax2.axhline(y=cci_overbought, color='red', linestyle='--', label=f'Overbought ({cci_overbought})')
+    ax2.axhline(y=cci_overbought, color='purple', linestyle='--', label=f'Overbought ({cci_overbought})')
     ax2.axhline(y=cci_oversold, color='green', linestyle='--', label=f'Oversold ({cci_oversold})')
     ax2.set_xlabel('Time', fontproperties=font_properties, color='white')
     ax2.set_ylabel('CCI', fontproperties=font_properties, color='white')
