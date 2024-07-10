@@ -111,7 +111,7 @@ def run_dpo(ticker, start_date, end_date, cash, commission, dpo_period, dpo_thre
         return None
     
     try:
-        st.subheader('DPO Visualization')
+        # st.subheader('DPO Visualization')
         dpo_viz(data, dpo_period, dpo_threshold)
         
         output = run_backtest(DPOStrategy, data, cash, commission)
