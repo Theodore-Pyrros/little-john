@@ -69,7 +69,7 @@ class RsiCross(Strategy):
                 self.position_type = 'short'
 
 
-font_path = "/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman.ttf"  # Adjust the path as necessary
+font_path = "Times New Roman.ttf"
 font_properties = fm.FontProperties(fname=font_path)
 
 def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
@@ -144,17 +144,7 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
 
     st.pyplot(fig, clear_figure=True)
 
-# Example data for testing
-np.random.seed(0)
-dates = pd.date_range('2020-01-01', periods=100)
-data = pd.DataFrame({
-    'Datetime': dates,
-    'Close': np.cumsum(np.random.randn(100)) + 100,
-    'Volume': np.random.randint(1, 1000, 100)
-})
-data.set_index('Datetime', inplace=True)
 
-rsi_cross_viz(data)
 
 
 
