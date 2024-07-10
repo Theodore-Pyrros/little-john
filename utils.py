@@ -26,12 +26,14 @@ def display_metrics(output):
     return result
 
 
-def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
-    # Path to the Times New Roman font file (adjust this path as needed)
-    font_path = "/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman.ttf"  # Example path for Linux
+# Check if Times New Roman is available, if not, fallback to a default font
+try:
+    font_properties = fm.FontProperties(fname='/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman.ttf')
+except FileNotFoundError:
+    font_properties = fm.FontProperties(family='serif')
 
+def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     # Explicitly set font properties
-    font_properties = fm.FontProperties(fname=font_path)
     fontdict = {'fontproperties': font_properties, 'color': 'white'}
 
     data = data[data['Volume'] > 0]
