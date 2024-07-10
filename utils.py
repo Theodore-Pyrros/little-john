@@ -21,6 +21,11 @@ def display_metrics(output):
     return result
 
 
+# Define font properties
+font_path = "Times New Roman.ttf"
+font_properties = fm.FontProperties(fname=font_path, size=14)
+title_font_properties = fm.FontProperties(fname=font_path, size=16, weight='bold')
+
 def plot_strat_perf(output, title):
     if '_equity_curve' not in output:
         st.error("Equity curve data not available. The backtest may not have completed successfully.")
@@ -43,21 +48,37 @@ def plot_strat_perf(output, title):
         st.warning("No data points match the filtering criteria. Displaying full equity curve.")
         trading_day_equity = equity_curve
 
-    fig, ax = plt.subplots(figsize=(14, 7))
-    ax.plot(trading_day_equity.index, trading_day_equity['Equity'], label='Equity')
-    ax.set_title(title)
-    ax.set_xlabel('Date')
-    ax.set_ylabel('Equity')
-    ax.legend()
-    ax.grid(True)
-    
+    fig, ax = plt.subplots(figsize=(14, 7), facecolor='none')
+
+    # Set transparent background
+    fig.patch.set_alpha(0)
+    ax.set_facecolor('none')
+
+    # Remove the outline of the axes
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+
+    ax.plot(trading_day_equity.index, trading_day_equity['Equity'], label='Equity', color='#66FF66')
+    ax.set_title(title, fontproperties=title_font_properties, color='white')
+    ax.set_xlabel('Date', fontproperties=font_properties, color='white')
+    ax.set_ylabel('Equity', fontproperties=font_properties, color='white')
+    ax.legend(prop=font_properties, facecolor='white', framealpha=0.5)
+    ax.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
+    ax.grid(False, axis='x')
+
     fig.autofmt_xdate()
     
     # Format the x-axis to display dates in YYYY-MM-DD format
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
     
+    ax.tick_params(axis='x', colors='white', labelsize=12)
+    ax.tick_params(axis='y', colors='white', labelsize=12)
+
+    for label in ax.get_xticklabels() + ax.get_yticklabels():
+        label.set_fontproperties(font_properties)
+    
     plt.tight_layout()
-    st.pyplot(fig)
+    st.pyplot(fig, clear_figure=True)
 
 
 
