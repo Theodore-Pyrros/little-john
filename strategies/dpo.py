@@ -112,10 +112,12 @@ def run_dpo(ticker, start_date, end_date, cash, commission, dpo_period, dpo_thre
     
     try:
         # st.subheader('DPO Visualization')
-        dpo_viz(data, dpo_period, dpo_threshold)
+        # dpo_viz(data, dpo_period, dpo_threshold)
         
         output = run_backtest(DPOStrategy, data, cash, commission)
         return output
     except Exception as e:
         st.error(f"An error occurred during backtesting: {str(e)}")
         return None
+
+
