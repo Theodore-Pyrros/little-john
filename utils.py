@@ -43,7 +43,7 @@ def plot_strat_perf(output, title):
         st.warning("No data points match the filtering criteria. Displaying full equity curve.")
         trading_day_equity = equity_curve
 
-    fig, ax = plt.subplots(figsize=(14, 4))
+    fig, ax = plt.subplots(figsize=(14, 5))
     ax.plot(trading_day_equity.index, trading_day_equity['Equity'], label='Equity')
     ax.set_title(title)
     ax.set_xlabel('Date')
