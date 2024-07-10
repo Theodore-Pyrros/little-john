@@ -127,19 +127,24 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     ax2.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
     ax2.grid(False, axis='x')
 
-    plt.title('RSI Cross Visualization', fontproperties=title_font_properties, color='white')
-    plt.xlabel('Time', fontproperties=font_properties, color='white')
-
     ax1.set_xticks([data[data['Date'] == date].index[0] for date in daily_indices])
     ax1.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30, fontproperties=font_properties, color='white')
 
-    # Change tick colors to white
     ax1.tick_params(axis='x', colors='white', labelsize=12)
     ax1.tick_params(axis='y', colors='white', labelsize=12)
     ax2.tick_params(axis='x', colors='white', labelsize=12)
     ax2.tick_params(axis='y', colors='white', labelsize=12)
 
-    plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.15)
+    for label in ax1.get_xticklabels() + ax1.get_yticklabels():
+        label.set_fontproperties(font_properties)
+    for label in ax2.get_xticklabels() + ax2.get_yticklabels():
+        label.set_fontproperties(font_properties)
+
+    # Title and labels
+    fig.suptitle('RSI Cross Visualization', fontproperties=title_font_properties, color='white')
+    ax2.set_xlabel('Time', fontproperties=font_properties, color='white')
+
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.9, bottom=0.15)
     plt.tight_layout()
 
     st.pyplot(fig, clear_figure=True)
