@@ -120,7 +120,7 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
 
     line2, = ax2.plot(data.index, rsi, label='RSI', color='purple')
     line3, = ax2.plot(data.index, short_rsi, label=f'RSI SMA({rsi_sma_short})', color='#FF6666')
-    line4, = ax2.plot(data.index, long_rsi, label=f'RSI SMA({rsi_sma_long})', color='#ADD8E6')
+    line4, = ax2.plot(data.index, long_rsi, label=f'RSI SMA({rsi_sma_long})', color='#4682B4')
     ax2.set_ylabel('RSI', fontproperties=font_properties, color='white')
     ax2.set_ylim(-5, 105)
     ax2.legend(prop=font_properties, facecolor='white', framealpha=0.5)
