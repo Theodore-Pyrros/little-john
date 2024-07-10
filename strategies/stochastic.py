@@ -102,7 +102,7 @@ def stoch_viz(data, stoch_k=14, stoch_d=3, stoch_overbought=80, stoch_oversold=2
     ax1.grid(False, axis='x')
 
     ax2.plot(data.index, data['k'], label='%K', color='yellow')
-    ax2.plot(data.index, data['d'], label='%D', color='green')
+    ax2.plot(data.index, data['d'], label='%D', color='cyan')
     ax2.axhline(stoch_overbought, color='red', linestyle='--', label='Overbought')
     ax2.axhline(stoch_oversold, color='red', linestyle='--', label='Oversold')
     ax2.set_ylabel('Stochastic Oscillator', fontproperties=font_properties, color='white')
