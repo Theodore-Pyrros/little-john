@@ -44,13 +44,6 @@ def plot_strat_perf(output, title):
         st.warning("No data points match the filtering criteria. Displaying full equity curve.")
         trading_day_equity = equity_curve
 
-    # Set the font globally
-    plt.rc('font', family='serif', serif='Times New Roman')
-    plt.rc('axes', titlesize=14, labelsize=12)
-    plt.rc('xtick', labelsize=10)
-    plt.rc('ytick', labelsize=10)
-    plt.rc('legend', fontsize=10)
-
     fig, ax = plt.subplots(figsize=(14, 5))
     ax.plot(trading_day_equity.index, trading_day_equity['Equity'], label='Equity')
     ax.set_title(title, fontsize=14, fontweight='bold')
