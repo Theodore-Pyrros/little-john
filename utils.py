@@ -45,9 +45,9 @@ def plot_strat_perf(output, title):
 
     fig, ax = plt.subplots(figsize=(14, 5))
     ax.plot(trading_day_equity.index, trading_day_equity['Equity'], label='Equity')
-    ax.set_title(title, fontname='Times New Roman')
-    ax.set_xlabel('Date', fontname='Times New Roman')
-    ax.set_ylabel('Equity', fontname='Times New Roman')
+    ax.set_title(title, family='serif')
+    ax.set_xlabel('Date', family='serif')
+    ax.set_ylabel('Equity', family='serif')
     ax.legend()
     ax.grid(True)
     
