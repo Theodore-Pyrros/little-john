@@ -59,7 +59,7 @@ def plot_strat_perf(output, title):
     for spine in ax.spines.values():
         spine.set_visible(False)
 
-    ax.plot(trading_day_equity.index, trading_day_equity['Equity'], label='Equity', color='#66FF66')
+    ax.plot(trading_day_equity.index, trading_day_equity['Equity'], label='Equity', color='#228B22')
     ax.set_title(title, fontproperties=title_font_properties, color='white')
     ax.set_xlabel('Date', fontproperties=font_properties, color='white')
     ax.set_ylabel('Equity', fontproperties=font_properties, color='white')
