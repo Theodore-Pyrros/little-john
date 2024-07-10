@@ -7,6 +7,8 @@ from backtesting.test import SMA
 from data_handler import fetch_data
 from utils import run_backtest, plot_strat_perf, display_metrics
 
+import matplotlib.font_manager as fm
+
 class BollingerBandsStrategy(Strategy):
     bb_period = 20  # Period for moving average
     bb_std_dev = 2   # Number of standard deviations for the bands
