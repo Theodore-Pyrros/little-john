@@ -57,10 +57,10 @@ def plot_strat_perf(output, title):
 
     fig, ax = plt.subplots(figsize=(14, 5))
     ax.plot(trading_day_equity.index, trading_day_equity['Equity'], label='Equity')
-    ax.set_title(title, fontdict={'family': 'serif', 'serif': 'Times New Roman', 'weight': 'bold', 'size': 14})
-    ax.set_xlabel('Date', fontdict={'family': 'serif', 'serif': 'Times New Roman', 'weight': 'bold', 'size': 12})
-    ax.set_ylabel('Equity', fontdict={'family': 'serif', 'serif': 'Times New Roman', 'weight': 'bold', 'size': 12})
-    ax.legend(prop={'family': 'serif', 'serif': 'Times New Roman', 'size': 10})
+    ax.set_title(title, fontdict={'family': 'serif', 'weight': 'bold', 'size': 14})
+    ax.set_xlabel('Date', fontdict={'family': 'serif', 'weight': 'bold', 'size': 12})
+    ax.set_ylabel('Equity', fontdict={'family': 'serif', 'weight': 'bold', 'size': 12})
+    ax.legend(prop={'family': 'serif', 'size': 10})
     ax.grid(True)
     
     fig.autofmt_xdate()
