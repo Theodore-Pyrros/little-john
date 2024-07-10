@@ -10,3 +10,5 @@ pandas_market_calendars
 matplotlib
 ipywidgets
 pyfiglet
+mplcursors
+
