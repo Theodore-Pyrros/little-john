@@ -15,6 +15,8 @@ from backtesting.lib import crossover
 from data_handler import fetch_data
 from utils import run_backtest, plot_strat_perf, display_metrics
 
+import matplotlib.font_manager as fm
+
 def calculate_adx(high, low, close, adx_period=14):
     plus_dm = np.zeros_like(high)
     minus_dm = np.zeros_like(high)
