@@ -7,7 +7,8 @@ from backtesting.lib import crossover
 from backtesting.test import SMA
 from data_handler import fetch_data
 from utils import run_backtest, plot_strat_perf, display_metrics
-import mplcursors
+
+import plotly.graph_objs as go
 
 class RsiCross(Strategy):
     rsi_sma_short = 10
@@ -68,8 +69,7 @@ class RsiCross(Strategy):
 
 
 # Set global font properties
-plt.rcParams['font.family'] = 'serif'
-plt.rcParams['font.serif'] = ['Times New Roman']
+plt.rcParams['font.family'] = 'Times New Roman'
 
 def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     data = data[data['Volume'] > 0]
@@ -96,55 +96,66 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     data['Date'] = data['Datetime'].dt.date
     daily_indices = data.groupby('Date').first().index
 
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 6), sharex=True, facecolor='none')
+    fig = go.Figure()
 
-    # Set transparent background
-    fig.patch.set_alpha(0)
-    ax1.set_facecolor('none')
-    ax2.set_facecolor('none')
-
-    # Remove the outline of the axes
-    for spine in ax1.spines.values():
-        spine.set_visible(False)
-    for spine in ax2.spines.values():
-        spine.set_visible(False)
-
-    line1, = ax1.plot(data.index, data['Close'], label='Price', color='blue')
-    ax1.set_ylabel('Price')
-    ax1.legend(facecolor='white', framealpha=0.5)
-    ax1.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
-    ax1.grid(False, axis='x')
-
-    line2, = ax2.plot(data.index, rsi, label='RSI', color='purple')
-    line3, = ax2.plot(data.index, short_rsi, label=f'RSI SMA({rsi_sma_short})', color='orange')
-    line4, = ax2.plot(data.index, long_rsi, label=f'RSI SMA({rsi_sma_long})', color='green')
-    ax2.set_ylabel('RSI')
-    ax2.set_ylim(-5, 105)
-    ax2.legend(facecolor='white', framealpha=0.5)
-    ax2.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
-    ax2.grid(False, axis='x')
-
-    plt.title('RSI Cross Visualization')
-    plt.xlabel('Time')
-
-    ax1.set_xticks([data[data['Date'] == date].index[0] for date in daily_indices])
-    ax1.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30)
-
-    plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.15)
-    plt.tight_layout()
-
-    # Add hover functionality with mplcursors
-    cursor1 = mplcursors.cursor(line1, hover=True)
-    cursor1.connect("add", lambda sel: sel.annotation.set_text(
-        f"Date: {data['Datetime'].iloc[sel.target.index].strftime('%Y-%m-%d %H:%M')}\nPrice: {data['Close'].iloc[sel.target.index]:.2f}"
+    # Add stock price line
+    fig.add_trace(go.Scatter(
+        x=data['Datetime'],
+        y=data['Close'],
+        mode='lines',
+        name='Price',
+        line=dict(color='blue'),
+        hovertemplate='Date: %{x}<br>Price: $%{y:.2f}<extra></extra>'
     ))
 
-    cursor2 = mplcursors.cursor([line2, line3, line4], hover=True)
-    cursor2.connect("add", lambda sel: sel.annotation.set_text(
-        f"Date: {data['Datetime'].iloc[sel.target.index].strftime('%Y-%m-%d %H:%M')}\nValue: {sel.target[1]:.2f}"
+    # Add RSI line
+    fig.add_trace(go.Scatter(
+        x=data['Datetime'],
+        y=rsi,
+        mode='lines',
+        name='RSI',
+        line=dict(color='purple'),
+        hovertemplate='Date: %{x}<br>RSI: %{y:.2f}<extra></extra>'
     ))
 
-    st.pyplot(fig)
+    # Add short RSI SMA line
+    fig.add_trace(go.Scatter(
+        x=data['Datetime'],
+        y=short_rsi,
+        mode='lines',
+        name=f'RSI SMA({rsi_sma_short})',
+        line=dict(color='orange'),
+        hovertemplate='Date: %{x}<br>RSI SMA({rsi_sma_short}): %{y:.2f}<extra></extra>'
+    ))
+
+    # Add long RSI SMA line
+    fig.add_trace(go.Scatter(
+        x=data['Datetime'],
+        y=long_rsi,
+        mode='lines',
+        name=f'RSI SMA({rsi_sma_long})',
+        line=dict(color='green'),
+        hovertemplate='Date: %{x}<br>RSI SMA({rsi_sma_long}): %{y:.2f}<extra></extra>'
+    ))
+
+    fig.update_layout(
+        title='RSI Cross Visualization',
+        xaxis=dict(
+            title='Date',
+            tickmode='array',
+            tickvals=[data[data['Date'] == date].index[0] for date in daily_indices],
+            ticktext=[date.strftime('%Y-%m-%d') for date in daily_indices]
+        ),
+        yaxis_title='Price / RSI',
+        showlegend=True,
+        legend=dict(
+            bgcolor='rgba(255,255,255,0.5)'  # Transparent white background for legend
+        ),
+        hovermode='x unified'
+    )
+
+    st.plotly_chart(fig)
+
 
 
 
