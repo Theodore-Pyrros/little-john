@@ -90,7 +90,7 @@ def sma_cross_viz(data, n1=10, n2=20, trades=None):
 
     ax.plot(data.index[start_idx:], data['Close'][start_idx:], label='Price', color='cyan')
     ax.plot(data.index[start_idx:], short_sma[start_idx - n1 + 1:], label=f'SMA({n1})', color='yellow')
-    ax.plot(data.index[start_idx:], long_sma[start_idx - n2 + 1:], label=f'SMA({n2})', color='green')
+    ax.plot(data.index[start_idx:], long_sma[start_idx - n2 + 1:], label=f'SMA({n2})', color='pink')
 
     # Plot trade markers if trades data is provided
     if trades is not None and isinstance(trades, pd.DataFrame):
@@ -148,8 +148,8 @@ def run_sma_cross(ticker, start_date, end_date, cash, commission, n1, n2, stop_l
         output = run_backtest(SmaCross, data, cash, commission)
         
         # Visualize the strategy with trades
-        st.subheader('SMA Cross Visualization with Trades')
-        with st.expander("Expand to see the SMA Cross Visualization"):
+        # st.subheader('SMA Cross Visualization with Trades')
+        with st.expander("Visualization with Trades"):
          if '_trades' in output and not output['_trades'].empty:
             sma_cross_viz(data, n1, n2, trades=output['_trades'])
          else:
