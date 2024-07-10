@@ -139,7 +139,7 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.15)
     plt.tight_layout()
 
-    st.pyplot(fig)
+    st.pyplot(fig, clear_figure=True)
 
 
 
