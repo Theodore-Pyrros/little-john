@@ -96,7 +96,7 @@ def bollinger_bands_viz(data, bb_period=20, bb_std_dev=2):
     for spine in ax.spines.values():
         spine.set_visible(False)
 
-    ax.plot(data.index, data['Close'], label='Price', color='#00A86B')  # Flashier pine green
+    ax.plot(data.index, data['Close'], label='Price', color='yellow')  # Flashier pine green
     ax.plot(data.index, upper_band, label='Upper Bollinger Band', linestyle='--', color='red')
     ax.plot(data.index, lower_band, label='Lower Bollinger Band', linestyle='--', color='green')
     ax.fill_between(data.index, lower_band, upper_band, color='gray', alpha=0.1)
