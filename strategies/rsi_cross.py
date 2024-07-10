@@ -65,9 +65,19 @@ class RsiCross(Strategy):
                 self.entry_price = self.data.Close[-1]
                 self.position_type = 'short'
 
-def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
-    plt.rcParams['font.family'] = 'Times New Roman'
 
+# Set global font properties
+plt.rcParams['font.family'] = 'serif'
+plt.rcParams['font.serif'] = ['Times New Roman']
+plt.rcParams['text.color'] = 'white'
+plt.rcParams['axes.labelcolor'] = 'white'
+plt.rcParams['xtick.color'] = 'white'
+plt.rcParams['ytick.color'] = 'white'
+plt.rcParams['axes.edgecolor'] = 'white'
+plt.rcParams['figure.facecolor'] = 'none'
+plt.rcParams['axes.facecolor'] = 'none'
+
+def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     data = data[data['Volume'] > 0]
     data.reset_index(inplace=True)
 
@@ -105,35 +115,40 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     for spine in ax2.spines.values():
         spine.set_visible(False)
 
-    ax1.plot(data.index, data['Close'], label='Price', color='blue')
-    ax1.set_ylabel('Price', color='white')
+    line1, = ax1.plot(data.index, data['Close'], label='Price', color='blue')
+    ax1.set_ylabel('Price')
     ax1.legend()
     ax1.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
     ax1.grid(False, axis='x')
 
-    ax2.plot(data.index, rsi, label='RSI', color='purple')
-    ax2.plot(data.index, short_rsi, label=f'RSI SMA({rsi_sma_short})', color='orange')
-    ax2.plot(data.index, long_rsi, label=f'RSI SMA({rsi_sma_long})', color='green')
-    ax2.set_ylabel('RSI', color='white')
+    line2, = ax2.plot(data.index, rsi, label='RSI', color='purple')
+    line3, = ax2.plot(data.index, short_rsi, label=f'RSI SMA({rsi_sma_short})', color='orange')
+    line4, = ax2.plot(data.index, long_rsi, label=f'RSI SMA({rsi_sma_long})', color='green')
+    ax2.set_ylabel('RSI')
     ax2.set_ylim(-5, 105)
     ax2.legend()
     ax2.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
     ax2.grid(False, axis='x')
 
-    plt.title('RSI Cross Visualization', color='white')
-    plt.xlabel('Time', color='white')
+    plt.title('RSI Cross Visualization')
+    plt.xlabel('Time')
 
     ax1.set_xticks([data[data['Date'] == date].index[0] for date in daily_indices])
-    ax1.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30, color='white')
-
-    # Change tick colors to white
-    ax1.tick_params(axis='x', colors='white')
-    ax1.tick_params(axis='y', colors='white')
-    ax2.tick_params(axis='x', colors='white')
-    ax2.tick_params(axis='y', colors='white')
+    ax1.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30)
 
     plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.15)
     plt.tight_layout()
+
+    # Add hover functionality with mplcursors
+    cursor1 = mplcursors.cursor(line1, hover=True)
+    cursor1.connect("add", lambda sel: sel.annotation.set_text(
+        f"Date: {data['Datetime'].iloc[sel.target.index].strftime('%Y-%m-%d %H:%M')}\nPrice: {data['Close'].iloc[sel.target.index]:.2f}"
+    ))
+
+    cursor2 = mplcursors.cursor([line2, line3, line4], hover=True)
+    cursor2.connect("add", lambda sel: sel.annotation.set_text(
+        f"Date: {data['Datetime'].iloc[sel.target.index].strftime('%Y-%m-%d %H:%M')}\nValue: {sel.target[1]:.2f}"
+    ))
 
     st.pyplot(fig)
 
