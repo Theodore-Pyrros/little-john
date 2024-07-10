@@ -43,25 +43,13 @@ input[type="date"] {
     font-size: 16px;
 }
 
-
-
-
-
-.stDateInput label {
-    font-family: serif !important;
+input[type="number"] {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 16px;
 }
 
-.stNumberInput label {
-    font-family: serif !important;
-}
 
-.stDateInput div {
-    font-family: serif !important;
-}
 
-.stNumberInput div {
-    font-family: serif !important;
-}
 
 
 
