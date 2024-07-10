@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib.font_manager as fm
 from backtesting import Backtest, Strategy
 import matplotlib.dates as mdates
 import streamlit as st
