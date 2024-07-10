@@ -65,7 +65,7 @@ def main():
             start_date = st.date_input('Start Date', 
                                        value=ten_days_ago,
                                        min_value=sixty_days_ago,
-                                       max_start_date)
+                                       max_value=max_start_date)
             
             cash = st.number_input('Initial Cash', min_value=1000, max_value=1000000, 
                                    value=10000)
