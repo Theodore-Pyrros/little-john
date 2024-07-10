@@ -20,6 +20,7 @@ def display_metrics(output):
     
     return result
 
+plt.rc_file('.config/matplotlibrc')
 
 def plot_strat_perf(output, title):
     if '_equity_curve' not in output:
