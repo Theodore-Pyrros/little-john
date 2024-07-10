@@ -264,3 +264,9 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+st.markdown("<div style='text-align: center; font-size: small;'>© Little John - Your Companion in Mastering the Markets</div>", unsafe_allow_html=True)
+
+
+
+
