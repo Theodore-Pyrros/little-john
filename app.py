@@ -22,7 +22,8 @@ from strategies.atr import run_atr
 from strategies.standard_deviation import run_standard_deviation
 
 
-st.set_page_config(layout="wide", page_title="Little John")
+st.set_page_config(layout="wide")
+#st.set_page_config(layout="wide", page_title="Little John")
 logo_url = "little-john_logo.png"
 st.logo(logo_url)
 
