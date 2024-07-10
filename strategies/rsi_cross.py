@@ -71,7 +71,8 @@ class RsiCross(Strategy):
 
 
 font_path = "Times New Roman.ttf"
-font_properties = fm.FontProperties(fname=font_path)
+font_properties = fm.FontProperties(fname=font_path, size=14)
+title_font_properties = fm.FontProperties(fname=font_path, size=20)
 
 def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     data = data[data['Volume'] > 0]
@@ -111,10 +112,9 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     for spine in ax2.spines.values():
         spine.set_visible(False)
 
-    # Plot the data
     line1, = ax1.plot(data.index, data['Close'], label='Price', color='blue')
     ax1.set_ylabel('Price', fontproperties=font_properties, color='white')
-    ax1.legend(facecolor='white', framealpha=0.5)
+    ax1.legend(prop=font_properties, facecolor='white', framealpha=0.5)
     ax1.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
     ax1.grid(False, axis='x')
 
@@ -123,27 +123,28 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     line4, = ax2.plot(data.index, long_rsi, label=f'RSI SMA({rsi_sma_long})', color='green')
     ax2.set_ylabel('RSI', fontproperties=font_properties, color='white')
     ax2.set_ylim(-5, 105)
-    ax2.legend(facecolor='white', framealpha=0.5)
+    ax2.legend(prop=font_properties, facecolor='white', framealpha=0.5)
     ax2.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
     ax2.grid(False, axis='x')
 
-    # Set titles and labels
-    plt.title('RSI Cross Visualization', fontproperties=font_properties, color='white')
+    plt.title('RSI Cross Visualization', fontproperties=title_font_properties, color='white')
     plt.xlabel('Time', fontproperties=font_properties, color='white')
 
     ax1.set_xticks([data[data['Date'] == date].index[0] for date in daily_indices])
     ax1.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30, fontproperties=font_properties, color='white')
 
     # Change tick colors to white
-    ax1.tick_params(axis='x', colors='white')
-    ax1.tick_params(axis='y', colors='white')
-    ax2.tick_params(axis='x', colors='white')
-    ax2.tick_params(axis='y', colors='white')
+    ax1.tick_params(axis='x', colors='white', labelsize=12)
+    ax1.tick_params(axis='y', colors='white', labelsize=12)
+    ax2.tick_params(axis='x', colors='white', labelsize=12)
+    ax2.tick_params(axis='y', colors='white', labelsize=12)
 
     plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.15)
     plt.tight_layout()
 
     st.pyplot(fig, clear_figure=True)
+
+
 
 
 
