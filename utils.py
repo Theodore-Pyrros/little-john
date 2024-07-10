@@ -26,16 +26,7 @@ def display_metrics(output):
     return result
 
 
-# Check if Times New Roman is available, if not, fallback to a default font
-try:
-    font_properties = fm.FontProperties(fname='/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman.ttf')
-except FileNotFoundError:
-    font_properties = fm.FontProperties(family='serif')
-
 def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
-    # Explicitly set font properties
-    fontdict = {'fontproperties': font_properties, 'color': 'white'}
-
     data = data[data['Volume'] > 0]
     data.reset_index(inplace=True)
 
@@ -60,7 +51,7 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     data['Date'] = data['Datetime'].dt.date
     daily_indices = data.groupby('Date').first().index
 
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 6), sharex=True)
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 6), sharex=True, facecolor='none')
 
     # Set transparent background
     fig.patch.set_alpha(0)
@@ -74,7 +65,7 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
         spine.set_visible(False)
 
     line1, = ax1.plot(data.index, data['Close'], label='Price', color='blue')
-    ax1.set_ylabel('Price', **fontdict)
+    ax1.set_ylabel('Price')
     ax1.legend(facecolor='white', framealpha=0.5)
     ax1.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
     ax1.grid(False, axis='x')
@@ -82,23 +73,17 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     line2, = ax2.plot(data.index, rsi, label='RSI', color='purple')
     line3, = ax2.plot(data.index, short_rsi, label=f'RSI SMA({rsi_sma_short})', color='orange')
     line4, = ax2.plot(data.index, long_rsi, label=f'RSI SMA({rsi_sma_long})', color='green')
-    ax2.set_ylabel('RSI', **fontdict)
+    ax2.set_ylabel('RSI')
     ax2.set_ylim(-5, 105)
     ax2.legend(facecolor='white', framealpha=0.5)
     ax2.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
     ax2.grid(False, axis='x')
 
-    plt.title('RSI Cross Visualization', **fontdict)
-    plt.xlabel('Time', **fontdict)
+    plt.title('RSI Cross Visualization')
+    plt.xlabel('Time')
 
     ax1.set_xticks([data[data['Date'] == date].index[0] for date in daily_indices])
-    ax1.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30, **fontdict)
-
-    # Change tick colors to white
-    ax1.tick_params(axis='x', colors='white')
-    ax1.tick_params(axis='y', colors='white')
-    ax2.tick_params(axis='x', colors='white')
-    ax2.tick_params(axis='y', colors='white')
+    ax1.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30)
 
     plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.15)
     plt.tight_layout()
