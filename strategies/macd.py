@@ -106,7 +106,7 @@ def macd_viz(data, macd_fast=12, macd_slow=26, macd_signal=9):
     ax1.grid(False, axis='x')
 
     ax2.plot(data.index, data['macd'], label='MACD', color='green')
-    ax2.plot(data.index, data['signal'], label='Signal', color='red')
+    ax2.plot(data.index, data['signal'], label='Signal', color='purple')
     ax2.bar(data.index, data['histogram'], label='Histogram', color='gray', alpha=0.3)
     ax2.set_xlabel('Time', fontproperties=font_properties, color='white')
     ax2.set_ylabel('MACD', fontproperties=font_properties, color='white')
