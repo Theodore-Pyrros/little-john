@@ -72,7 +72,7 @@ class RsiCross(Strategy):
 
 font_path = "Times New Roman.ttf"
 font_properties = fm.FontProperties(fname=font_path, size=14)
-title_font_properties = fm.FontProperties(fname=font_path, size=20, weight='bold')
+title_font_properties = fm.FontProperties(fname=font_path, size=16, weight='bold')
 
 def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     data = data[data['Volume'] > 0]
