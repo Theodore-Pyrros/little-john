@@ -6,6 +6,8 @@ from backtesting import Strategy
 from data_handler import fetch_data
 from utils import run_backtest, plot_strat_perf, display_metrics
 
+import matplotlib.font_manager as fm
+
 def calculate_obv(close, volume):
     obv = np.zeros_like(volume)
     obv[0] = volume[0]
@@ -58,6 +60,12 @@ class OBVStrategy(Strategy):
                 self.entry_price = self.data.Close[-1]
                 self.position_type = 'short'
 
+
+# Define font properties
+font_path = "Times New Roman.ttf"
+font_properties = fm.FontProperties(fname=font_path, size=14)
+title_font_properties = fm.FontProperties(fname=font_path, size=16, weight='bold')
+
 def obv_viz(data, obv_periods=20):
     data = data[data['Volume'] > 0].copy()
     data.reset_index(inplace=True)
@@ -71,26 +79,56 @@ def obv_viz(data, obv_periods=20):
     data['Date'] = data['Datetime'].dt.date
     daily_indices = data.groupby('Date').first().index
     
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 10), sharex=True)
-    ax1.plot(data.index, data['Close'], label='Price', color='blue')
-    ax1.set_title('OBV Strategy Visualization')
-    ax1.set_ylabel('Price')
-    ax1.legend()
-    ax1.grid(True)
-    
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 6), sharex=True, facecolor='none')
+
+    # Set transparent background
+    fig.patch.set_alpha(0)
+    ax1.set_facecolor('none')
+    ax2.set_facecolor('none')
+
+    # Remove the outline of the axes
+    for spine in ax1.spines.values():
+        spine.set_visible(False)
+    for spine in ax2.spines.values():
+        spine.set_visible(False)
+
+    ax1.plot(data.index, data['Close'], label='Price', color='#00A86B')  # Flashier pine green
+    ax1.set_ylabel('Price', fontproperties=font_properties, color='white')
+    ax1.legend(prop=font_properties, facecolor='white', framealpha=0.5)
+    ax1.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
+    ax1.grid(False, axis='x')
+
     ax2.plot(data.index, obv, label='OBV', color='orange')
     ax2.plot(data.index, obv_sma, label=f'OBV SMA({obv_periods})', color='red')
-    ax2.set_xlabel('Time')
-    ax2.set_ylabel('OBV')
-    ax2.legend()
-    ax2.grid(True)
+    ax2.set_xlabel('Time', fontproperties=font_properties, color='white')
+    ax2.set_ylabel('OBV', fontproperties=font_properties, color='white')
+    ax2.legend(prop=font_properties, facecolor='white', framealpha=0.5)
+    ax2.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
+    ax2.grid(False, axis='x')
     
-    plt.xticks([data[data['Date'] == date].index[0] for date in daily_indices],
-               [date.strftime('%Y-%m-%d') for date in daily_indices],
-               rotation=30)
+    ax1.set_xticks([data[data['Date'] == date].index[0] for date in daily_indices])
+    ax1.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30, fontproperties=font_properties, color='white')
     
+    ax1.tick_params(axis='x', colors='white', labelsize=12)
+    ax1.tick_params(axis='y', colors='white', labelsize=12)
+    ax2.tick_params(axis='x', colors='white', labelsize=12)
+    ax2.tick_params(axis='y', colors='white', labelsize=12)
+    
+    for label in ax1.get_xticklabels() + ax1.get_yticklabels():
+        label.set_fontproperties(font_properties)
+    for label in ax2.get_xticklabels() + ax2.get_yticklabels():
+        label.set_fontproperties(font_properties)
+
+    fig.suptitle('OBV Strategy Visualization', fontproperties=title_font_properties, color='white')
+    
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.9, bottom=0.15)
     plt.tight_layout()
-    st.pyplot(fig)
+    st.pyplot(fig, clear_figure=True)
+
+
+
+
+
 
 def run_obv(ticker, start_date, end_date, cash, commission, obv_periods, stop_loss_pct, take_profit_pct, enable_shorting, enable_stop_loss, enable_take_profit):
     OBVStrategy.obv_periods = obv_periods
