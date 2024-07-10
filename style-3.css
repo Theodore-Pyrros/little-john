@@ -1,0 +1,48 @@
+/* Style Sheet */
+
+h1  {
+    color: #000000 !important;  /* Black with !important */
+    margin-top: -80px;  
+    font-family: serif !important;
+}
+
+h3  {
+    font-size: 20px;
+    color: #0d3d66 !important;  /* Dark Blue with !important */
+    padding-left: 5px;
+    font-family: serif !important;
+}
+
+h2, h4, h5 {
+    color: #0d3d66 !important;  /* Dark Blue with !important */
+    font-family: serif !important;
+}
+
+h6 {
+    font-family: serif !important;
+}
+
+p, span, div {
+    font-family: serif !important;  /* Serif Font with !important */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

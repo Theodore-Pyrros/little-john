@@ -1,0 +1,13 @@
+[theme]
+
+primaryColor = "#0d3d66"  # dark blue
+backgroundColor = "#141B2C"  # very dark blue
+secondaryBackgroundColor = "#0d3d66"  # dark blue
+textColor = "#FFFFFF"  # white
+font = "serif"
+
+# Optional: Add a custom theme color for secondary text
+[customTheme]
+# secondaryTextColor = "#D3D3D3"  # light grey
+
+
