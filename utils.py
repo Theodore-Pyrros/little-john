@@ -43,12 +43,23 @@ def plot_strat_perf(output, title):
         st.warning("No data points match the filtering criteria. Displaying full equity curve.")
         trading_day_equity = equity_curve
 
+    # Set the font globally
+    rcParams.update({
+        'font.family': 'serif',
+        'font.serif': 'Times New Roman',
+        'axes.titlesize': 14,
+        'axes.labelsize': 12,
+        'xtick.labelsize': 10,
+        'ytick.labelsize': 10,
+        'legend.fontsize': 10
+    })
+
     fig, ax = plt.subplots(figsize=(14, 5))
     ax.plot(trading_day_equity.index, trading_day_equity['Equity'], label='Equity')
-    ax.set_title(title, family='serif')
-    ax.set_xlabel('Date', family='serif')
-    ax.set_ylabel('Equity', family='serif')
-    ax.legend()
+    ax.set_title(title, fontdict={'family': 'serif', 'serif': 'Times New Roman', 'weight': 'bold', 'size': 14})
+    ax.set_xlabel('Date', fontdict={'family': 'serif', 'serif': 'Times New Roman', 'weight': 'bold', 'size': 12})
+    ax.set_ylabel('Equity', fontdict={'family': 'serif', 'serif': 'Times New Roman', 'weight': 'bold', 'size': 12})
+    ax.legend(prop={'family': 'serif', 'serif': 'Times New Roman', 'size': 10})
     ax.grid(True)
     
     fig.autofmt_xdate()
@@ -58,6 +69,8 @@ def plot_strat_perf(output, title):
     
     plt.tight_layout()
     st.pyplot(fig)
+
+
 
 
 
