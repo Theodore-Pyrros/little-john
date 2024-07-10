@@ -6,6 +6,8 @@ from backtesting import Strategy
 from data_handler import fetch_data
 from utils import run_backtest, plot_strat_perf, display_metrics
 
+import matplotlib.font_manager as fm
+
 def calculate_dpo(close, dpo_period=20):
     shift = dpo_period // 2 + 1
     sma = close.rolling(window=dpo_period).mean()
@@ -56,27 +58,45 @@ class DPOStrategy(Strategy):
 
 
 
+# Define font properties
+font_path = "Times New Roman.ttf"
+font_properties = fm.FontProperties(fname=font_path, size=14)
+title_font_properties = fm.FontProperties(fname=font_path, size=16, weight='bold')
+
 def dpo_viz(data, dpo_period=20, dpo_threshold=0):
     data = data[data['Volume'] > 0].copy()
     data.reset_index(drop=True, inplace=True)
     
     dpo = calculate_dpo(data['Close'], dpo_period)
 
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 10), sharex=True)
-    ax1.plot(data.index, data['Close'], label='Price', color='blue')
-    ax1.set_title('DPO Strategy Visualization')
-    ax1.set_ylabel('Price')
-    ax1.legend()
-    ax1.grid(True)
-    
-    ax2.plot(data.index, dpo, label='DPO', color='orange')
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 6), sharex=True, facecolor='none')
+
+    # Set transparent background
+    fig.patch.set_alpha(0)
+    ax1.set_facecolor('none')
+    ax2.set_facecolor('none')
+
+    # Remove the outline of the axes
+    for spine in ax1.spines.values():
+        spine.set_visible(False)
+    for spine in ax2.spines.values():
+        spine.set_visible(False)
+
+    ax1.plot(data.index, data['Close'], label='Price', color='#00A86B')  # Flashier pine green
+    ax1.set_ylabel('Price', fontproperties=font_properties, color='white')
+    ax1.legend(prop=font_properties, facecolor='white', framealpha=0.5)
+    ax1.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
+    ax1.grid(False, axis='x')
+
+    ax2.plot(data.index, dpo, label='DPO', color='purple')
     ax2.axhline(y=0, color='red', linestyle='--', label='Zero Line')
     ax2.axhline(y=dpo_threshold, color='green', linestyle='--', label=f'Upper Threshold ({dpo_threshold})')
-    ax2.axhline(y=-dpo_threshold, color='green', linestyle='--', label=f'Lower Threshold ({-dpo_threshold})')
-    ax2.set_xlabel('Time')
-    ax2.set_ylabel('DPO')
-    ax2.legend()
-    ax2.grid(True)
+    ax2.axhline(y=-dpo_threshold, color='yellow', linestyle='--', label=f'Lower Threshold ({-dpo_threshold})')
+    ax2.set_xlabel('Time', fontproperties=font_properties, color='white')
+    ax2.set_ylabel('DPO', fontproperties=font_properties, color='white')
+    ax2.legend(prop=font_properties, facecolor='white', framealpha=0.5)
+    ax2.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
+    ax2.grid(False, axis='x')
     
     # Set x-axis ticks
     num_ticks = 10
@@ -87,12 +107,31 @@ def dpo_viz(data, dpo_period=20, dpo_threshold=0):
     # Format x-axis labels
     if 'Date' in data.columns:
         date_labels = data.loc[tick_locations, 'Date'].dt.strftime('%Y-%m-%d')
-        ax2.set_xticklabels(date_labels, rotation=45, ha='right')
+        ax2.set_xticklabels(date_labels, rotation=45, ha='right', fontproperties=font_properties, color='white')
     else:
-        ax2.set_xticklabels(tick_locations)
+        ax2.set_xticklabels(tick_locations, fontproperties=font_properties, color='white')
     
+    ax1.tick_params(axis='x', colors='white', labelsize=12)
+    ax1.tick_params(axis='y', colors='white', labelsize=12)
+    ax2.tick_params(axis='x', colors='white', labelsize=12)
+    ax2.tick_params(axis='y', colors='white', labelsize=12)
+    
+    for label in ax1.get_xticklabels() + ax1.get_yticklabels():
+        label.set_fontproperties(font_properties)
+    for label in ax2.get_xticklabels() + ax2.get_yticklabels():
+        label.set_fontproperties(font_properties)
+
+    fig.suptitle('DPO Strategy Visualization', fontproperties=title_font_properties, color='white')
+    
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.9, bottom=0.15)
     plt.tight_layout()
-    st.pyplot(fig)
+    st.pyplot(fig, clear_figure=True)
+
+
+
+
+
+
     
 def run_dpo(ticker, start_date, end_date, cash, commission, dpo_period, dpo_threshold, 
             stop_loss_pct, take_profit_pct, enable_shorting, enable_stop_loss, 
