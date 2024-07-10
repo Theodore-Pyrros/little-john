@@ -118,12 +118,12 @@ def run_sma_cross(ticker, start_date, end_date, cash, commission, n1, n2, stop_l
         output = run_backtest(SmaCross, data, cash, commission)
         
         # Visualize the strategy with trades
-        st.subheader('SMA Cross Visualization with Trades')
-        if '_trades' in output and not output['_trades'].empty:
-            sma_cross_viz(data, n1, n2, trades=output['_trades'])
-        else:
-            st.warning("No trades were executed in this backtest.")
-            sma_cross_viz(data, n1, n2)  # Still show the visualization even if no trades
+        # st.subheader('SMA Cross Visualization with Trades')
+        # if '_trades' in output and not output['_trades'].empty:
+            # sma_cross_viz(data, n1, n2, trades=output['_trades'])
+        # else:
+            # st.warning("No trades were executed in this backtest.")
+            # sma_cross_viz(data, n1, n2)  # Still show the visualization even if no trades
         
         return output
     except Exception as e:
