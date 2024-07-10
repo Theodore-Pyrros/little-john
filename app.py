@@ -266,6 +266,18 @@ def main():
 if __name__ == "__main__":
     main()
 
+
+
+def apply_common_style(fig):
+    fig.update_layout(
+        template='plotly_dark',  # Dark theme
+        paper_bgcolor='rgba(0,0,0,0)',  # Transparent background
+        plot_bgcolor='rgba(0,0,0,0)',  # Transparent plot area
+        font=dict(color='white')  # White font color
+    )
+    return fig
+
+
 st.markdown("<div class='footer'>© Little John - Your Companion in Mastering the Markets</div>", unsafe_allow_html=True)
 
 
