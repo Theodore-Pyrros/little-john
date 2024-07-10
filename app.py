@@ -76,6 +76,7 @@ def main():
 
         # Get strategy-specific parameters
         strategy_params = get_strategy_params(strategy)
+        enable_shorting = st.checkbox('Enable Shorting', value=True)
             
         with st.expander("Stop Loss / Take Profit", expanded=True):
             stop_loss_pct = st.slider('Stop Loss %', min_value=0.0, max_value=10.0, 
@@ -198,8 +199,6 @@ def main():
                                               strategy_params['std_period'], strategy_params['std_multiplier'],
                                               stop_loss_pct, take_profit_pct, enable_shorting, 
                                               enable_stop_loss, enable_take_profit)
-            
-            enable_shorting = st.checkbox('Enable Shorting', value=True)
 
         if output is not None:
             with st.expander('Strategy Performance', expanded=True):
