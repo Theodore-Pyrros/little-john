@@ -2,7 +2,9 @@ import matplotlib.pyplot as plt
 from backtesting import Backtest, Strategy
 import matplotlib.dates as mdates
 import streamlit as st
+
 from matplotlib import rcParams
+from matplotlib.font_manager import FontProperties
 
 
 def display_metrics(output):
@@ -44,23 +46,15 @@ def plot_strat_perf(output, title):
         st.warning("No data points match the filtering criteria. Displaying full equity curve.")
         trading_day_equity = equity_curve
 
-    # Set the font globally
-    rcParams.update({
-        'font.family': 'serif',
-        'font.serif': 'Times New Roman',
-        'axes.titlesize': 14,
-        'axes.labelsize': 12,
-        'xtick.labelsize': 10,
-        'ytick.labelsize': 10,
-        'legend.fontsize': 10
-    })
+    # Set the font properties
+    font_properties = FontProperties(family='serif', style='normal', weight='bold', size=12)
 
     fig, ax = plt.subplots(figsize=(14, 5))
     ax.plot(trading_day_equity.index, trading_day_equity['Equity'], label='Equity')
-    ax.set_title(title, fontdict={'family': 'serif', 'weight': 'bold', 'size': 14})
-    ax.set_xlabel('Date', fontdict={'family': 'serif', 'weight': 'bold', 'size': 12})
-    ax.set_ylabel('Equity', fontdict={'family': 'serif', 'weight': 'bold', 'size': 12})
-    ax.legend(prop={'family': 'serif', 'size': 10})
+    ax.set_title(title, fontproperties=font_properties)
+    ax.set_xlabel('Date', fontproperties=font_properties)
+    ax.set_ylabel('Equity', fontproperties=font_properties)
+    ax.legend(prop=font_properties)
     ax.grid(True)
     
     fig.autofmt_xdate()
