@@ -101,7 +101,7 @@ def vwap_viz(data, vwap_periods=20):
     xtick_labels = [data.iloc[i]['Date'].strftime('%Y-%m-%d') for i in xtick_locs]
 
     ax.set_xticks(xtick_locs)
-    ax.set_xticklabels(xtick_labels, rotation=30, fontproperties=font_properties, color='white')
+    ax.set_xticklabels(xtick_labels, fontproperties=font_properties, color='white')
     
     ax.tick_params(axis='x', colors='white', labelsize=12)
     ax.tick_params(axis='y', colors='white', labelsize=12)
