@@ -70,14 +70,6 @@ def main():
                 min_value=min_end_date,
                 max_value=datetime.now()
                 )
-
-                start_date = st.date_input(
-                'Start Date',
-                value=start_date,
-                min_value=sixty_days_ago,
-                max_value=end_date - timedelta(days=1),
-                key='start_date_2'
-                )
             
             cash = st.number_input('Initial Cash', min_value=1000, max_value=1000000, 
                                    value=10000)
