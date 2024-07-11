@@ -59,7 +59,7 @@ def main():
                 'Start Date', 
                 value=ten_days_ago,
                 min_value=sixty_days_ago,
-                max_value=datetime.now()
+                max_value=datetime.now()-timedelta(days=1)
                 )
     
                 min_end_date = start_date + timedelta(days=1)
