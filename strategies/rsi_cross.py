@@ -128,9 +128,9 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     # Limit the number of x-ticks to 7
     xtick_locs = np.linspace(0, len(data) - 1, 7, dtype=int)
     xtick_labels = [data.iloc[i]['Date'].strftime('%Y-%m-%d') for i in xtick_locs]
-
-    ax1.set_xticks([data[data['Date'] == date].index[0] for date in daily_indices])
-    ax1.set_xticklabels([date.strftime('%Y-%m-%d') for date in daily_indices], rotation=30, fontproperties=font_properties, color='white')
+    
+    ax1.set_xticks(xtick_locs)
+    ax1.set_xticklabels(xtick_labels, rotation=30, fontproperties=font_properties, color='white')
 
     ax1.tick_params(axis='x', colors='white', labelsize=12)
     ax1.tick_params(axis='y', colors='white', labelsize=12)
