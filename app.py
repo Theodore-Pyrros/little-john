@@ -38,14 +38,6 @@ def load_css(style):
 # Load CSS
 load_css("style.css")
 
-st.markdown("""
-    <style>
-        /* Target the label of st.expander */
-        .streamlit-expanderHeader {
-            font-size: 24px !important;
-        }
-    </style>
-    """, unsafe_allow_html=True)
 
 def main():
     st.title('Little John')
