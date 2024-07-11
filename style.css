@@ -38,6 +38,12 @@ p, span, div {
     font-size: small;
 }
 
+/* CSS to make text for all expanders larger */
+div.st-expanderContent p, div.st-expanderContent h1, div.st-expanderContent h2, div.st-expanderContent h3, div.st-expanderContent h4, div.st-expanderContent h5, div.st-expanderContent h6, div.st-expanderContent span, div.st-expanderContent label {
+    font-size: 1.5em;
+}
+
+
 input[type="date"] {
     font-family: "Times New Roman", Times, serif;
     font-size: 16px;
