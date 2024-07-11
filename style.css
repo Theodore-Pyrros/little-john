@@ -39,9 +39,18 @@ p, span, div {
 }
 
 /* CSS to make text for all expanders larger */
-div.st-expanderContent p, div.st-expanderContent h1, div.st-expanderContent h2, div.st-expanderContent h3, div.st-expanderContent h4, div.st-expanderContent h5, div.st-expanderContent h6, div.st-expanderContent span, div.st-expanderContent label {
+div.st-expanderContent p,
+div.st-expanderContent h1,
+div.st-expanderContent h2,
+div.st-expanderContent h3,
+div.st-expanderContent h4,
+div.st-expanderContent h5,
+div.st-expanderContent h6,
+div.st-expanderContent span,
+div.st-expanderContent label {
     font-size: 30px;
 }
+
 
 
 input[type="date"] {
