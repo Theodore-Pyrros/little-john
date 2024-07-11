@@ -113,7 +113,7 @@ def cci_viz(data, cci_period=20, cci_overbought=100, cci_oversold=-100):
     xtick_labels = [data.iloc[i]['Date'].strftime('%Y-%m-%d') for i in xtick_locs]
 
     ax2.set_xticks(xtick_locs)
-    ax2.set_xticklabels(xtick_labels, rotation=30, fontproperties=font_properties, color='white')
+    ax2.set_xticklabels(xtick_labels, fontproperties=font_properties, color='white')
     
     ax1.tick_params(axis='x', colors='white', labelsize=12)
     ax1.tick_params(axis='y', colors='white', labelsize=12)
