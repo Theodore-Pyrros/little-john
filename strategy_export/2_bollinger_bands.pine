@@ -1,0 +1,54 @@
+
+//@version=5
+strategy("2 - Bollinger Bands Strategy", overlay=true)
+
+// Input parameters
+bb_period = input.int(20, "Bollinger Bands Period", minval=1)
+bb_std_dev = input.float(2.0, "Standard Deviation", minval=0.1, step=0.1)
+stop_loss_pct = input.float(2.0, "Stop Loss %", minval=0.0, step=0.1) / 100
+take_profit_pct = input.float(5.0, "Take Profit %", minval=0.0, step=0.1) / 100
+enable_shorting = input.bool(true, "Enable Shorting")
+enable_stop_loss = input.bool(true, "Enable Stop Loss")
+enable_take_profit = input.bool(true, "Enable Take Profit")
+
+// Calculate Bollinger Bands
+[middle, upper, lower] = ta.bb(close, bb_period, bb_std_dev)
+
+// Plotting
+plot(middle, color=color.blue, title="Middle Band")
+plot(upper, color=color.red, title="Upper Band")
+plot(lower, color=color.green, title="Lower Band")
+fill(upper, lower, color=color.rgb(33, 150, 243, 95), title="Background")
+
+// Trading logic
+long_condition = close < lower
+short_condition = close > upper and enable_shorting
+
+// Execute trades
+if (long_condition)
+    strategy.entry("Long", strategy.long)
+
+if (short_condition)
+    strategy.entry("Short", strategy.short)
+
+// Stop Loss and Take Profit
+long_stop_price = strategy.position_avg_price * (1 - stop_loss_pct)
+long_profit_price = strategy.position_avg_price * (1 + take_profit_pct)
+short_stop_price = strategy.position_avg_price * (1 + stop_loss_pct)
+short_profit_price = strategy.position_avg_price * (1 - take_profit_pct)
+
+if (strategy.position_size > 0)
+    if (enable_stop_loss)
+        strategy.exit("Long Stop", "Long", stop=long_stop_price)
+    if (enable_take_profit)
+        strategy.exit("Long Profit", "Long", limit=long_profit_price)
+
+if (strategy.position_size < 0)
+    if (enable_stop_loss)
+        strategy.exit("Short Stop", "Short", stop=short_stop_price)
+    if (enable_take_profit)
+        strategy.exit("Short Profit", "Short", limit=short_profit_price)
+
+// Plotting signals
+plotshape(long_condition, title="Buy Signal", location=location.belowbar, color=color.green, style=shape.triangleup, size=size.small)
+plotshape(short_condition, title="Sell Signal", location=location.abovebar, color=color.red, style=shape.triangledown, size=size.small)

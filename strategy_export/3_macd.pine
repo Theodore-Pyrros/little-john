@@ -1,0 +1,54 @@
+
+//@version=5
+strategy("3 - MACD Strategy", overlay=false)
+
+// Input parameters
+fast_length = input.int(12, "Fast Length", minval=1)
+slow_length = input.int(26, "Slow Length", minval=1)
+signal_length = input.int(9, "Signal Smoothing", minval=1)
+stop_loss_pct = input.float(2.0, "Stop Loss %", minval=0.0, step=0.1) / 100
+take_profit_pct = input.float(5.0, "Take Profit %", minval=0.0, step=0.1) / 100
+enable_shorting = input.bool(true, "Enable Shorting")
+enable_stop_loss = input.bool(true, "Enable Stop Loss")
+enable_take_profit = input.bool(true, "Enable Take Profit")
+
+// Calculate MACD
+[macd_line, signal_line, hist] = ta.macd(close, fast_length, slow_length, signal_length)
+
+// Plotting
+plot(macd_line, color=color.blue, title="MACD")
+plot(signal_line, color=color.orange, title="Signal")
+plot(hist, color=color.red, title="Histogram", style=plot.style_histogram)
+
+// Trading logic
+long_condition = ta.crossover(macd_line, signal_line)
+short_condition = ta.crossunder(macd_line, signal_line) and enable_shorting
+
+// Execute trades
+if (long_condition)
+    strategy.entry("Long", strategy.long)
+
+if (short_condition)
+    strategy.entry("Short", strategy.short)
+
+// Stop Loss and Take Profit
+long_stop_price = strategy.position_avg_price * (1 - stop_loss_pct)
+long_profit_price = strategy.position_avg_price * (1 + take_profit_pct)
+short_stop_price = strategy.position_avg_price * (1 + stop_loss_pct)
+short_profit_price = strategy.position_avg_price * (1 - take_profit_pct)
+
+if (strategy.position_size > 0)
+    if (enable_stop_loss)
+        strategy.exit("Long Stop", "Long", stop=long_stop_price)
+    if (enable_take_profit)
+        strategy.exit("Long Profit", "Long", limit=long_profit_price)
+
+if (strategy.position_size < 0)
+    if (enable_stop_loss)
+        strategy.exit("Short Stop", "Short", stop=short_stop_price)
+    if (enable_take_profit)
+        strategy.exit("Short Profit", "Short", limit=short_profit_price)
+
+// Plotting signals
+plotshape(long_condition, title="Buy Signal", location=location.bottom, color=color.green, style=shape.triangleup, size=size.small)
+plotshape(short_condition, title="Sell Signal", location=location.top, color=color.red, style=shape.triangledown, size=size.small)

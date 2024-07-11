@@ -1,0 +1,52 @@
+
+//@version=5
+strategy("obv - OBV Strategy", overlay=false)
+
+// Input parameters
+obv_periods = input.int(20, "OBV SMA Periods", minval=1)
+stop_loss_pct = input.float(2.0, "Stop Loss %", minval=0.0, step=0.1) / 100
+take_profit_pct = input.float(5.0, "Take Profit %", minval=0.0, step=0.1) / 100
+enable_shorting = input.bool(true, "Enable Shorting")
+enable_stop_loss = input.bool(true, "Enable Stop Loss")
+enable_take_profit = input.bool(true, "Enable Take Profit")
+
+// Calculate OBV and its SMA
+obv = ta.obv
+obv_sma = ta.sma(obv, obv_periods)
+
+// Plotting
+plot(obv, color=color.blue, title="OBV")
+plot(obv_sma, color=color.red, title="OBV SMA")
+
+// Trading logic
+long_condition = ta.crossover(obv, obv_sma)
+short_condition = ta.crossunder(obv, obv_sma) and enable_shorting
+
+// Execute trades
+if (long_condition)
+    strategy.entry("Long", strategy.long)
+
+if (short_condition)
+    strategy.entry("Short", strategy.short)
+
+// Stop Loss and Take Profit
+long_stop_price = strategy.position_avg_price * (1 - stop_loss_pct)
+long_profit_price = strategy.position_avg_price * (1 + take_profit_pct)
+short_stop_price = strategy.position_avg_price * (1 + stop_loss_pct)
+short_profit_price = strategy.position_avg_price * (1 - take_profit_pct)
+
+if (strategy.position_size > 0)
+    if (enable_stop_loss)
+        strategy.exit("Long Stop", "Long", stop=long_stop_price)
+    if (enable_take_profit)
+        strategy.exit("Long Profit", "Long", limit=long_profit_price)
+
+if (strategy.position_size < 0)
+    if (enable_stop_loss)
+        strategy.exit("Short Stop", "Short", stop=short_stop_price)
+    if (enable_take_profit)
+        strategy.exit("Short Profit", "Short", limit=short_profit_price)
+
+// Plotting signals
+plotshape(long_condition, title="Buy Signal", location=location.bottom, color=color.green, style=shape.triangleup, size=size.small)
+plotshape(short_condition, title="Sell Signal", location=location.top, color=color.red, style=shape.triangledown, size=size.small)
