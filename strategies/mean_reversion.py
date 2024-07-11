@@ -107,8 +107,8 @@ def mean_reversion_viz(data, mr_period=20, mr_entry_std=2.0, mr_exit_std=0.5):
     xtick_locs = np.linspace(0, len(data) - 1, 7, dtype=int)
     xtick_labels = [data.iloc[i]['Date'].strftime('%Y-%m-%d') for i in xtick_locs]
 
-    ax2.set_xticks(xtick_locs)
-    ax2.set_xticklabels(xtick_labels, rotation=30, fontproperties=font_properties, color='white')
+    ax.set_xticks(xtick_locs)
+    ax.set_xticklabels(xtick_labels, rotation=30, fontproperties=font_properties, color='white')
     
     ax.tick_params(axis='x', colors='white', labelsize=12)
     ax.tick_params(axis='y', colors='white', labelsize=12)
