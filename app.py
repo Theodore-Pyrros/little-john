@@ -71,10 +71,8 @@ def main():
                 max_value=datetime.now()
                 )
             
-            cash = st.number_input('Initial Cash', min_value=1000, max_value=1000000, 
-                                   value=10000)
-            commission = st.slider('Commission (%)', min_value=0.0, max_value=1.0, 
-                                   value=0.0, step=0.01)
+            cash = st.number_input('Initial Cash', min_value=1000, max_value=1000000, value=10000)
+            commission = st.slider('Commission (%)', min_value=0.0, max_value=1.0, value=0.0, step=0.01)
 
 
         ticker = st.text_input('Enter stock ticker', value='META')
