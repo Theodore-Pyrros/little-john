@@ -38,9 +38,11 @@ p, span, div {
     font-size: small;
 }
 
-div[data-testid="stExpander"] div[role="button"] p {
-    font-size: 20px;
+/* styles.css */
+.css-1ekf893 { /* This class name might change based on Streamlit's internal implementation */
+    font-size: 16px !important;
 }
+
 
 
 
