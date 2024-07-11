@@ -110,7 +110,7 @@ def rsi_cross_viz(data, rsi_sma_short=10, rsi_sma_long=20, rsi_period=14):
     for spine in ax2.spines.values():
         spine.set_visible(False)
 
-    line1, = ax1.plot(daily_indices, data['Close'], label='Price', color='#66FF66')
+    line1, = ax1.plot(data.index, data['Close'], label='Price', color='#66FF66')
     ax1.set_ylabel('Price', fontproperties=font_properties, color='white')
     ax1.legend(prop=font_properties, facecolor='white', framealpha=0.5)
     ax1.grid(True, axis='y', color='grey', linestyle='-', linewidth=0.5)
