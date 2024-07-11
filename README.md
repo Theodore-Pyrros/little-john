@@ -7,5 +7,5 @@ Little John is your trusted companion in mastering the markets and making inform
 ## Impressions
 
 ![Little John - Impression](https://github.com/Sunshine-Python/little-john/blob/main/little-john-screenshot.png)
-[Little John - Impression_2](https://github.com/Sunshine-Python/little-john/blob/main/little-john-screenshot2.png)
+![Little John - Impression_2](https://github.com/Sunshine-Python/little-john/blob/main/little-john-screenshot2.png)
 
