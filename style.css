@@ -38,9 +38,8 @@ p, span, div {
     font-size: small;
 }
 
-/* CSS to make subheaders in expanders larger */
-div.st-expander > div:first-child {
-    font-size: 30px;
+div[data-testid="stExpander"] div[role="button"] p {
+    font-size: 20px;
 }
 
 
