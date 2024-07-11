@@ -128,6 +128,19 @@ def main():
                     st.success("All saved strategies have been cleared.")
                 else:
                     st.error("Failed to clear saved strategies. Check the console for more information.")
+                    
+            saved_strategies_dir = 'saved_strategies'
+            json_files = [f for f in os.listdir(saved_strategies_dir) if f.endswith('.json')]
+            selected_json = st.selectbox('Select a saved strategy', [''] + json_files)
+
+            if selected_json:
+                if st.button('Generate PineScript'):
+                    json_path = os.path.join(saved_strategies_dir, selected_json)
+                    try:
+                        pinescripter(json_path)
+                        st.success(f"PineScript generated for {selected_json}")
+                    except Exception as e:
+                        st.error(f"Error generating PineScript: {str(e)}")
 
 
     with col2:
