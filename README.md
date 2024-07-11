@@ -6,5 +6,5 @@ Little John is your trusted companion in mastering the markets and making inform
 
 ## Screenshots
 
-
+little-john-screenshot.png
 
