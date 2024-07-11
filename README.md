@@ -4,8 +4,8 @@ Designed to empower both novice and experienced traders, Little John offers a co
 
 Little John is your trusted companion in mastering the markets and making informed investment decisions.
 
-## Screenshots
+## Impressions
 
 ![Little John - Impression](https://github.com/Sunshine-Python/little-john/blob/main/little-john-screenshot.png)
-
+[Little John - Impression_2](https://github.com/Sunshine-Python/little-john/blob/main/little-john-screenshot2.png)
 
